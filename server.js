@@ -2,6 +2,7 @@
 *
 ********/
 const express = require('express'); //Express.js
+//const path = require('path');
 
 /******** Declaration des variables
 *
@@ -21,5 +22,6 @@ var server=app.listen(3101, function() {
 var abs_path= '/home/nas02a/etudiants/inf/uapv1602054/CERIGAme/CERIGame/';
 app.get('/', function(req, res) {
 	console.log('load page /')
-	res.redirect('/index.html');
+	/*res.send('index.html');*/
+	res.sendFile(abs_path + "index.html");
 });
