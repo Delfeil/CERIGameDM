@@ -25,3 +25,7 @@ app.get('/', function(req, res) {
 	/*res.send('index.html');*/
 	res.sendFile(abs_path + "index.html");
 });
+
+app.get('/login', function(req, res) {
+	console.log('Login: ', req.query.login, " mdp: ", req.query.mdp);
+});
