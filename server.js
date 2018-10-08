@@ -18,3 +18,8 @@ var server=app.listen(3101, function() {
 /******** Gestion des URI
 *
 ********/
+var abs_path= '/home/nas02a/etudiants/inf/uapv1602054/CERIGAme/CERIGame/';
+app.get('/', function(req, res) {
+	console.log('load page /')
+	res.redirect('/index.html');
+});
