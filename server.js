@@ -4,7 +4,7 @@
 const express = require('express'); //Express.js
 //const path = require('path');
 const pgClient = require('pg');		//BD PGSQL
-const bcrypt = require('bcrypt');	//Crytage des mdp
+const sha1 = require('sha1');	//Crytage des mdp
 
 /******** Declaration des variables
 *
@@ -45,25 +45,14 @@ app.get('/login', function(req, res) {
 		};
 		client.query(sql, function(err, result){
 			var responseData = {};
-			console.log("result: ", result)
+			console.log("result: ", result, "mdp: ", sha1(req.query.mdp))
 			if(err) {
 				console.log('Erreur d’exécution de la requete' + err.stack);
-			} else if ((result.rows[0] != null)/* && (result.rows[0].motpasse == req.query.mdp)*/) {
-				
-				// result.rows[0].motpasse == req.query.mdp
-				bcrypt.compare(result.rows[0].motpasse, req.query.mdp, function(err, response) {
-					if(err) {
-						console.log('Erreur d’exécution de la requete' + err.stack);
-					} else if (response) {
-						console.log("mot de passe correct");
-						request.session.isConnected = true;
-						responseData.data=result.rows[0].nom;
-						responseData.statusMsg='Connexion réussie : bonjour' + result.rows[0].prenom;
-					} else {
-						console.log('Mot de passe incorrecte');
-						responseData.statusMsg='Connexion échouée : informations de connexion incorrecte';
-					}
-				});
+			} else if ((result.rows[0] != null) && (result.rows[0].motpasse == sha1(req.query.mdp))) {
+				console.log("mot de passe correct");
+				req.session.isConnected = true;
+				responseData.data=result.rows[0].nom;
+				responseData.statusMsg='Connexion réussie : bonjour' + result.rows[0].prenom;
 			} else {
 				console.log('Connexion échouée : informations de connexion incorrecte');
 				responseData.statusMsg='Connexion échouée : informations de connexion incorrecte';
@@ -72,6 +61,4 @@ app.get('/login', function(req, res) {
 		});
 		client.release();
 	});
-	// test
-	// test2
 });
