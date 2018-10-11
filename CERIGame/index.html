@@ -1,5 +1,23 @@
-<form action="/login" method="get">
-	<input type="texte" placeholder="Login" name="login">
-	<input type="password" placeholder="mdp" name="mdp">
-	<input type="submit" value="transmettre">
-</form>
+<head>
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+</head>
+<body>
+	<form action="/login" method="get">
+		<input class="login" type="texte" placeholder="Login" name="login">
+		<input class="password" type="password" placeholder="mdp" name="mdp">
+		<input class="connect" value="transmettre">
+	</form>
+</body>
+<script type="text/javascript">
+	$('.connect').on('click', function(){
+		var login = $('.login').val();
+		var mdp = $('.password').val();
+		console.log("Event click connect:login:", login, " mdp:", mdp);
+		$.ajax({
+			type: 'GET',
+			url: '/login?login=' + login + '&mdp=' + mdp,
+		}).done(function(data) {
+			console.log("result:", data);
+		});
+	});
+</script>

@@ -5,11 +5,27 @@ const express = require('express'); //Express.js
 //const path = require('path');
 const pgClient = require('pg');		//BD PGSQL
 const sha1 = require('sha1');	//Crytage des mdp
+const session = require('express-session');	//Gestion des sessions
+const MongoDBStore = require('connect-mongodb-session')(session);	//MongoDB for session
 
 /******** Declaration des variables
 *
 ********/
 const app = express(); // expressJS
+app.use(session({
+	//	Initialisation de la session
+	secret: 'ma phrase secrete',
+	saveUninitialized: false,
+	resave: false,
+	store: new MongoDBStore({
+		uri: "mongodb://127.0.0.1:27017/test",
+		collection: 'mySession',
+		touchAfter: 24 * 3600
+	}),
+	cookie: {
+		maxAge: 24 * 3600 * 1000
+	}
+}));
 
 /******** Configuration du serveur NodeJS - Port : 3xxx
 *
@@ -50,7 +66,13 @@ app.get('/login', function(req, res) {
 				console.log('Erreur d’exécution de la requete' + err.stack);
 			} else if ((result.rows[0] != null) && (result.rows[0].motpasse == sha1(req.query.mdp))) {
 				console.log("mot de passe correct");
+
 				req.session.isConnected = true;
+				req.session.username = req.query.login;
+				req.session.name = result.rows[0].nom;
+				req.session.firstName = result.rows[0].prenom;
+				req.session.id = result.rows[0].id;
+
 				responseData.data=result.rows[0].nom;
 				responseData.statusMsg='Connexion réussie : bonjour' + result.rows[0].prenom;
 			} else {
