@@ -1,11 +1,14 @@
 <head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-route.js"></script>
+
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 </head>
 <body>
-	<form action="/login" method="get">
-		<input class="login" type="texte" placeholder="Login" name="login">
-		<input class="password" type="password" placeholder="mdp" name="mdp">
-		<input class="connect" value="transmettre">
+	<form name="login-form" ng-submit="login()">
+		<input class="login" type="texte" placeholder="Login" name="login" ng-model="login">
+		<input class="password" type="password" placeholder="mdp" name="mdp" ng-model="password">
+		<input class="connect" type="submit" value="transmettre">
 	</form>
 </body>
 <script type="text/javascript">
