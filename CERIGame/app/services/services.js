@@ -24,10 +24,11 @@ function AuthService($http) {
 		return $http
 			.get('/login?login=' + login + '&mdp=' + pwd)
 			.then(function(response){
-				console.log("response:", response)
-				if(response.data.statusResp){
+				console.log("response:", response.data)
+				return(response.data);
+				/*if(response.data.statusResp){
 					console.log('Connecté => status reponse:'+response.data.statusResp+' message: '+response.data.statusMsg+' objet:'+JSON.stringify(response.data.data));
-				}
+				}*/
 			});
 	}
 }

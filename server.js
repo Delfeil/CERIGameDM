@@ -82,7 +82,9 @@ app.get('/login', function(req, res) {
 				req.session.firstName = result.rows[0].prenom;
 				req.session.id = result.rows[0].id;
 
-				responseData.data=result.rows[0].nom;
+				responseData.name=result.rows[0].nom;
+				responseData.username = req.query.login;
+				responseData.firstName = result.rows[0].prenom;
 				responseData.statusMsg='Connexion réussie : bonjour' + result.rows[0].prenom;
 			} else {
 				console.log('Connexion échouée : informations de connexion incorrecte');
@@ -105,4 +107,8 @@ app.get('/app/app.js', function(req, res) {
 
 app.get('/app/services/services.js', function(req, res) {
 	res.sendFile(path.join(__dirname + '/CERIGame/app/services/services.js'))
+});
+
+app.get('/css/main.css', function(req, res) {
+	res.sendFile(path.join(__dirname + '/CERIGame/css/main.css'))
 });
