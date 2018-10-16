@@ -22,21 +22,21 @@
 			<p class="text-center">Veuillez-vous ientifiez</p>
 			<div class="form-row">
 	    		<div class="col">	
-					<input class="form-control" type="texte" placeholder="Login" name="login" ng-model="username">
+					<input class="form-control" id='login' type="texte" placeholder="Login" name="login" ng-model="username">
 				</div>
 				<div class="col">	
-					<input class="form-control" type="password" placeholder="mdp" name="mdp" ng-model="password">
+					<input class="form-control" id='password' type="password" placeholder="mdp" name="mdp" ng-model="password">
 				</div>
 				<div class="col">
-					<input class="btn btn-primary" type="submit" value="transmettre">
+					<input class="btn btn-primary" id="connect" type="submit" value="transmettre">
 				</div>
 			</div>
 		</form>
 	</body>
 	<script type="text/javascript">
-		$('.connect').on('click', function(){
-			var username = $('.login').val();
-			var mdp = $('.password').val();
+		$('#connect').on('click', function(){
+			var username = $('#login').val();
+			var mdp = $('#password').val();
 			console.log("Event click connect:login:", username, " mdp:", mdp);
 			angular.element($("body")).scope().username = username;
 			angular.element($("body")).scope().password = mdp;

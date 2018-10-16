@@ -1,4 +1,5 @@
 var app = angular.module('main', []) 
 	.controller('main_controller', main_controller) 
 	.service("accessDataService", accessDataService) 
+	.service('session', sessionService)
 	.service('auth', AuthService)

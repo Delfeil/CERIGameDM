@@ -1,4 +1,4 @@
-function main_controller($scope, auth, accessDataService) {
+function main_controller($scope, auth) {
 	$scope.username = null;
 	$scope.password = null;
 
