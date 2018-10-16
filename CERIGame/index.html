@@ -1,39 +1,51 @@
-<head>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	 <link rel="stylesheet" type="text/css" href="css/main.css">
+<!doctype html>
+<html lang="fr" ng-app="main">
+	<head>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-route.js"></script>
+		<script type="text/javascript">
+			var path='/home/nas02a/etudiants/inf/uapv1602054/CERIGAme/CERIGame/'
+		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-route.js"></script>
+		
+		<script src="app/controllers/controller.js"></script>
+		<script src="app/services/services.js"></script>
+		<script src="app/app.js"></script>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-</head>
-<body>
-	<form class= "form-signin" name="login-form" ng-submit="login()">
-		<h1 class="text-center">WARNING!</h1>
-		<p class="text-center">Veuillez-vous ientifiez</p>
-		<div class="form-row">
-    		<div class="col">	
-				<input class="form-control" type="texte" placeholder="Login" name="login" ng-model="login">
+		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	</head>
+	<body ng-controller="main_controller">
+		<form class= "form-signin" name="login-form" ng-submit="login()">
+			<h1 class="text-center">WARNING!</h1>
+			<p class="text-center">Veuillez-vous ientifiez</p>
+			<div class="form-row">
+	    		<div class="col">	
+					<input class="form-control" type="texte" placeholder="Login" name="login" ng-model="username">
+				</div>
+				<div class="col">	
+					<input class="form-control" type="password" placeholder="mdp" name="mdp" ng-model="password">
+				</div>
+				<div class="col">
+					<input class="btn btn-primary" type="submit" value="transmettre">
+				</div>
 			</div>
-			<div class="col">	
-				<input class="form-control" type="password" placeholder="mdp" name="mdp" ng-model="password">
-			</div>
-			<div class="col">
-				<input class="btn btn-primary" type="submit" value="transmettre">
-			</div>
-		</div>
-	</form>
-</body>
-<script type="text/javascript">
-	$('.connect').on('click', function(){
-		var login = $('.login').val();
-		var mdp = $('.password').val();
-		console.log("Event click connect:login:", login, " mdp:", mdp);
-		$.ajax({
-			type: 'GET',
-			url: '/login?login=' + login + '&mdp=' + mdp,
-		}).done(function(data) {
-			console.log("result:", data);
+		</form>
+	</body>
+	<script type="text/javascript">
+		$('.connect').on('click', function(){
+			var username = $('.login').val();
+			var mdp = $('.password').val();
+			console.log("Event click connect:login:", username, " mdp:", mdp);
+			angular.element($("body")).scope().username = username;
+			angular.element($("body")).scope().password = mdp;
+			// $.ajax({
+			// 	type: 'GET',
+			// 	url: '/login?login=' + login + '&mdp=' + mdp,
+			// }).done(function(data) {
+			// 	console.log("result:", data);
+			// });
 		});
-	});
-</script>
+	</script>
+</html>

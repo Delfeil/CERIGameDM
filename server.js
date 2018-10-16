@@ -7,6 +7,10 @@ const pgClient = require('pg');		//BD PGSQL
 const sha1 = require('sha1');	//Crytage des mdp
 const session = require('express-session');	//Gestion des sessions
 const MongoDBStore = require('connect-mongodb-session')(session);	//MongoDB for session
+const path = require('path');
+//var appJs = require('./CERIGame/app/app.js')
+//var controllerJs = require('./CERIGame/app/controllers/controller.js')
+//var servicesJs = require('./CERIGame/app/services/services.js')
 
 /******** Declaration des variables
 *
@@ -26,6 +30,11 @@ app.use(session({
 		maxAge: 24 * 3600 * 1000
 	}
 }));
+
+app.use(express.static('./CERIGame/app/app.js'));
+app.use(express.static('./CERIGame/app/controllers/controller.js'));
+app.use(express.static('./CERIGame/app/services/services.js'));
+
 
 /******** Configuration du serveur NodeJS - Port : 3xxx
 *
@@ -83,4 +92,17 @@ app.get('/login', function(req, res) {
 		});
 		client.release();
 	});
+});
+
+//Loadig js files...
+app.get('/app/controllers/controller.js', function(req, res) {
+	res.sendFile(path.join(__dirname + '/CERIGame/app/controllers/controller.js'));
+});
+
+app.get('/app/app.js', function(req, res) {
+	res.sendFile(path.join(__dirname + '/CERIGame/app/app.js'));
+});
+
+app.get('/app/services/services.js', function(req, res) {
+	res.sendFile(path.join(__dirname + '/CERIGame/app/services/services.js'))
 });
