@@ -32,12 +32,9 @@ function AuthService($http, session) {
 						username: data.username,
 						firstName: data.firstName
 					});
-					console.log("session:", session.getInfo('bib'));
-					if(session.getInfo('last_connect') == null) {
-						session.setInfo('last_connect', {
-							last_connect: new Date()
-						});
-					}
+					session.setInfo('last_connect', {
+						last_connect: new Date()
+					});
 				}
 				return(response.data);
 				/*if(response.data.statusResp){
@@ -47,18 +44,17 @@ function AuthService($http, session) {
 	}
 
 	this.logOut = function() {
+		var last_connexion = session.getInfo('last_connect');
+		session.destroy();
+		session.setInfo('last_connect', last_connexion);
 		return $http
 			.get('/logout')
 			.then(function(response) {
-				session.destroy();
-				session.setInfo('last_connect', {
-						last_connect: new Date()
-					});
 				return(response.data);
 			});
 	};
 
-	this.isLoggedIn = function(session) {
+	this.isLoggedIn = function() {
 		return session.getUser() !== null;
 	}
 }
@@ -81,7 +77,6 @@ function sessionService($log, $window) {
 		return JSON.parse($window.localStorage.getItem('session.' + key));
 	}
 	this.destroy = function() {
-		console.log("ici");
 		$window.localStorage.clear();
 	}
 }

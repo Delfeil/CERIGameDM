@@ -88,6 +88,11 @@ app.get('/login', function(req, res) {
 	});
 });
 
+app.get('/logout', function(req, res) {
+	req.session.destroy();
+	res.send();
+});
+
 //Loadig js files...
 app.get('/app/controllers/controller.js', function(req, res) {
 	res.sendFile(path.join(__dirname + '/CERIGame/app/controllers/controller.js'));

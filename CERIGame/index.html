@@ -20,7 +20,7 @@
 	<body ng-controller="main_controller">
 		
 		<!--<div class="contener" ng-controller="bandeau_controller">-->
-		<div class="contener">
+		<div class="contener" ng-hide="notLoggedIn()" ng-show="isLoggedIn()">
 			<div class="bandeau row">
 				<span class="colonne_Logo col-6">
     				<p> Logo </p>
@@ -32,27 +32,28 @@
     				<p> nom </p>
     			</span>
     			<span class="colonne col-2">
-    				<input class="deconnect btn btn-primary" id="deconnect" type="submit" value="deconnexion" ng-click="logOut()">
+    				<form ng-submit="logOut()">
+    					<input class="deconnect btn btn-primary" id="deconnect" type="submit" value="deconnexion">
+	    			</form>
     			</span>
   			</div>
   		</div>
+			<form class= "form-signin" name="login-form" ng-submit="login()" ng-show="notLoggedIn()" ng-hide="isLoggedIn()">
+				<h1 class="text-center">WARNING!</h1>
+				<p class="text-center" id="message-connect">Veuillez-vous identifier</p>
 
-		<form class= "form-signin" name="login-form" ng-submit="login()">
-			<h1 class="text-center">WARNING!</h1>
-			<p class="text-center" id="message-connect">Veuillez-vous identifier</p>
-
-			<div class="form-row">
-	    		<div class="col">	
-					<input class="form-control" id='login' type="texte" placeholder="Login" name="login" ng-model="username">
+				<div class="form-row">
+		    		<div class="col">	
+						<input class="form-control" id='login' type="texte" placeholder="Login" name="login" ng-model="username">
+					</div>
+					<div class="col">	
+						<input class="form-control" id='password' type="password" placeholder="mdp" name="mdp" ng-model="password">
+					</div>
+					<div class="col">
+						<input class="bouton_connect btn btn-primary" id="connect" type="submit" value="connexion">
+					</div>
 				</div>
-				<div class="col">	
-					<input class="form-control" id='password' type="password" placeholder="mdp" name="mdp" ng-model="password">
-				</div>
-				<div class="col">
-					<input class="bouton_connect btn btn-primary" id="connect" type="submit" value="connexion">
-				</div>
-			</div>
-		</form>
+			</form>
 	</body>
 	<script type="text/javascript">
 		$('#connect').on('click', function(){

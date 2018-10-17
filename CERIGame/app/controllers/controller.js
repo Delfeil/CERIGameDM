@@ -1,11 +1,5 @@
 
 function bandeau_controller($scope, session) {
-	/*$scope.show = function() {
-
-	}*/
-	$scope.afficheMessage = function(message) {
-		console.log("là:", message);
-	}
 }
 
 	// Controller pour login
@@ -44,6 +38,10 @@ function main_controller($scope, auth) {
 	$scope.logOut = function() {
 		auth.logOut();
 	}
+
+	$scope.notLoggedIn = function() {
+		return !auth.isLoggedIn();
+	}	
 
 	$scope.isLoggedIn = function() {
 		return auth.isLoggedIn();
