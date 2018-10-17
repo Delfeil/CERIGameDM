@@ -1,6 +1,7 @@
 html body {
     margin: 0;
     height: 100%;
+    width: 100%;
 }
 
 body {
@@ -12,10 +13,12 @@ body {
 }
 
 .form-signin {
-    width: 100%;
+	margin-left: auto;
+  	margin-right: auto;
+  	margin-top: 25%;
+  	width: 100%;
     max-width: 330px;
     padding: 15px;
-    margin: 25%;
     background-color: rgba(255, 150, 150, 0.5);
     border: solid;
     border-color: red;
@@ -24,5 +27,39 @@ body {
 
 .form-control:focus {
     outline:none !important;
-    background-color: red;
+    box-shadow:0 0 0 .2rem rgba(255, 0, 0, 1);
+}
+
+.btn-primary{
+	background-color: #004466;
+	border-color: #004466;
+}
+
+.btn-primary:hover {
+    background-color: #004466;
+    border-color: #004466;
+}
+
+.btn-primary:focus {
+	box-shadow:0 0 0 .2rem rgba(255, 0, 0, 1);
+}
+
+.bandeau{
+	border: solid;
+	border-radius: 1em;
+	border-color: red;
+	background-color: rgba(255, 150, 150, 0.5);
+	padding: 5px;
+	width: auto;
+}
+.colonne{
+	text-align: center
+}
+
+.contener{
+	width: 97%;
+	margin-left: auto;
+  	margin-right: auto;
+  	margin-top: 5px;
+	
 }
