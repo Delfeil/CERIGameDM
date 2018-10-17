@@ -23,6 +23,7 @@ body {
     border: solid;
     border-color: red;
     border-radius: 1em;
+    color:white;
 }
 
 .form-control:focus {
@@ -47,8 +48,8 @@ body {
 .bandeau{
 	border: solid;
 	border-radius: 1em;
-	border-color: red;
-	background-color: rgba(255, 150, 150, 0.5);
+	border-color: #4da6ff;
+	background-color: rgba(128, 191, 255, 0.5);
 	padding: 5px;
 	width: auto;
 }
@@ -56,10 +57,28 @@ body {
 	text-align: center
 }
 
+.colonne_logo{
+	text-align: left
+}
+
 .contener{
 	width: 97%;
 	margin-left: auto;
   	margin-right: auto;
   	margin-top: 5px;
-	
+	color:white;
+}
+
+.deconnect{
+	background-color: #004466;
+	border-color: #004466;
+}
+
+.deconnect:hover {
+    background-color: #004466;
+    border-color: #004466;
+}
+
+.deconnect:focus {
+	box-shadow:0 0 0 .2rem rgba(77, 166, 255, 1);
 }
