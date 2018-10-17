@@ -81,6 +81,7 @@ function sessionService($log, $window) {
 		return JSON.parse($window.localStorage.getItem('session.' + key));
 	}
 	this.destroy = function() {
+		console.log("ici");
 		$window.localStorage.clear();
 	}
 }

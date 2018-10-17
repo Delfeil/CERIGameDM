@@ -77,7 +77,7 @@ app.get('/login', function(req, res) {
 				responseData.name=result.rows[0].nom;
 				responseData.username = req.query.login;
 				responseData.firstName = result.rows[0].prenom;
-				responseData.statusMsg='Connexion réussie : bonjour' + result.rows[0].prenom;
+				responseData.statusMsg='Connexion réussie : bonjour ' + result.rows[0].prenom;
 			} else {
 				console.log('Connexion échouée : informations de connexion incorrecte');
 				responseData.statusMsg='Connexion échouée : informations de connexion incorrecte';

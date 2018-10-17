@@ -19,16 +19,17 @@
 	</head>
 	<body ng-controller="main_controller">
 		
+		<!--<div class="contener" ng-controller="bandeau_controller">-->
 		<div class="contener">
 			<div class="bandeau row">
-    			<span class="colonne col-8">
+    			<span class="colonne col-8" id="bandeau-message">
     				<p> message </p>
     			</span>
-    			<span class="colonne col-2">
+    			<span class="colonne col-2" id="bandeau-nom">
     				<p> nom </p>
     			</span>
     			<span class="colonne col-2">
-    				<input class="bouton_connect btn btn-primary" id="deconnect" type="submit" value="deconnexion">
+    				<input class="bouton_connect btn btn-primary" id="deconnect" type="submit" value="deconnexion" ng-click="logOut()">
 
     			</span>
   			</div>
@@ -36,7 +37,7 @@
 
 		<form class= "form-signin" name="login-form" ng-submit="login()">
 			<h1 class="text-center">WARNING!</h1>
-			<p class="text-center">Veuillez-vous identifiez</p>
+			<p class="text-center" id="message-connect">Veuillez-vous identifier</p>
 			<div class="form-row">
 	    		<div class="col">	
 					<input class="form-control" id='login' type="texte" placeholder="Login" name="login" ng-model="username">

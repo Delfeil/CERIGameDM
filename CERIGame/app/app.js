@@ -1,4 +1,5 @@
-var app = angular.module('main', []) 
+var app = angular.module('main', [])
+	.controller('bandeau_controller', bandeau_controller)
 	.controller('main_controller', main_controller) 
 	.service("accessDataService", accessDataService) 
 	.service('session', sessionService)
