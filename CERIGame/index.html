@@ -17,9 +17,25 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	</head>
 	<body ng-controller="main_controller">
+		
+		<div class="contener">
+			<div class="bandeau row">
+    			<span class="colonne col-8">
+    				<p> message </p>
+    			</span>
+    			<span class="colonne col-2">
+    				<p> nom </p>
+    			</span>
+    			<span class="colonne col-2">
+    				<input class="bouton_connect btn btn-primary" id="deconnect" type="submit" value="deconnexion">
+
+    			</span>
+  			</div>
+  		</div>
+
 		<form class= "form-signin" name="login-form" ng-submit="login()">
 			<h1 class="text-center">WARNING!</h1>
-			<p class="text-center">Veuillez-vous ientifiez</p>
+			<p class="text-center">Veuillez-vous identifiez</p>
 			<div class="form-row">
 	    		<div class="col">	
 					<input class="form-control" id='login' type="texte" placeholder="Login" name="login" ng-model="username">
@@ -28,7 +44,7 @@
 					<input class="form-control" id='password' type="password" placeholder="mdp" name="mdp" ng-model="password">
 				</div>
 				<div class="col">
-					<input class="btn btn-primary" id="connect" type="submit" value="transmettre">
+					<input class="bouton_connect btn btn-primary" id="connect" type="submit" value="transmettre">
 				</div>
 			</div>
 		</form>
