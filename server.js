@@ -27,6 +27,8 @@ app.use(session({
 	}
 }));
 
+app.use(express.static(__dirname + '/CERIGame'))
+
 var pool = new pgClient.Pool({
 	user: 'uapv1602054',
 	host: '127.0.0.1',
@@ -93,7 +95,7 @@ app.get('/logout', function(req, res) {
 	res.send();
 });
 
-//Loadig js files...
+/*//Loadig js files...
 app.get('/app/controllers/controller.js', function(req, res) {
 	res.sendFile(path.join(__dirname + '/CERIGame/app/controllers/controller.js'));
 });
@@ -108,4 +110,4 @@ app.get('/app/services/services.js', function(req, res) {
 
 app.get('/css/main.css', function(req, res) {
 	res.sendFile(path.join(__dirname + '/CERIGame/css/main.css'))
-});
+});*/
