@@ -29,7 +29,7 @@
     				<p> message </p>
     			</span>
     			<span class="colonne col-2" id="bandeau-nom">
-    				<p> nom </p>
+    				<p> {{ nom }} </p>
     			</span>
     			<span class="colonne col-2">
     				<form ng-submit="logOut()">
@@ -38,22 +38,25 @@
     			</span>
   			</div>
   		</div>
-			<form class= "form-signin" name="login-form" ng-submit="login()" ng-show="notLoggedIn()" ng-hide="isLoggedIn()">
-				<h1 class="text-center">WARNING!</h1>
-				<p class="text-center" id="message-connect">Veuillez-vous identifier</p>
+  		<div class="contener">
+  			<div class="row {{ classBandeau }}">{{ textBandeau }}</div>
+  		</div>
+		<form class= "form-signin" name="login-form" ng-submit="login()" ng-show="notLoggedIn()" ng-hide="isLoggedIn()">
+			<h1 class="text-center">WARNING!</h1>
+			<p class="text-center" id="message-connect">Veuillez-vous identifier</p>
 
-				<div class="form-row">
-		    		<div class="col">	
-						<input class="form-control" id='login' type="texte" placeholder="Login" name="login" ng-model="username">
-					</div>
-					<div class="col">	
-						<input class="form-control" id='password' type="password" placeholder="mdp" name="mdp" ng-model="password">
-					</div>
-					<div class="col">
-						<input class="bouton_connect btn btn-primary" id="connect" type="submit" value="connexion">
-					</div>
+			<div class="form-row">
+	    		<div class="col">	
+					<input class="form-control" id='login' type="texte" placeholder="Login" name="login" ng-model="username">
 				</div>
-			</form>
+				<div class="col">	
+					<input class="form-control" id='password' type="password" placeholder="mdp" name="mdp" ng-model="password">
+				</div>
+				<div class="col">
+					<input class="bouton_connect btn btn-primary" id="connect" type="submit" value="connexion">
+				</div>
+			</div>
+		</form>
 	</body>
 	<script type="text/javascript">
 		$('#connect').on('click', function(){

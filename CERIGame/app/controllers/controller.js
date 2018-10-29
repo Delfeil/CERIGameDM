@@ -7,16 +7,27 @@ function main_controller($scope, auth) {
 	$scope.username = null;
 	$scope.password = null;
 
+	$scope.nom = "nom";
+	$scope.classBandeau = null;
+
+	$scope.textBandeau = null;
+
 	$scope.afficheMessage = function(message) {
-		$('#bandeau-message').text(message);
+		//$('#bandeau-message').text(message);
+		$scope.classBandeau = "bandeau";
+
+		$scope.textBandeau = message;
 	}
 
 	$scope.bandeauNom = function(nom) {
-		$('#bandeau-nom').text(nom);
+		$scope.nom = nom;
 	}
 
 	$scope.afficheMessageError = function(message) {
-		$('#message-connect').text(message);
+		//$('#message-connect').text(message);
+		$scope.classBandeau = "error";
+
+		$scope.textBandeau = message;
 	}
 
 	$scope.affiche
