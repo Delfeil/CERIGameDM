@@ -29,6 +29,7 @@ body {
 .error {
     animation-duration: 5s;
     animation-iteration-count: 1;
+    opacity:0;
     background-color: rgba(255, 150, 150, 0.5);
     border: solid;
     border-color: red;
@@ -36,6 +37,18 @@ body {
     color:white;
     padding: 5px;
     width: auto;
+    animation-name: erreur;
+    animation-duration: 6s;    
+    animation-iteration-count: 1;
+    animation-direction: alternate;  
+}
+
+@keyframes erreur {
+    0% {left: 100%; opacity : 0;}
+    25% {left: 0%;  opacity : 1;}
+    50% {left: 0%;  opacity : 1;}
+    75% {left: 0%;  opacity : 1;}
+    100% {display: none; left: 100%;  opacity : 0; visibility : hidden;}
 }
 
 .form-control:focus {
@@ -58,13 +71,27 @@ body {
 }
 
 .bandeau{
+    opacity:0; 
 	border: solid;
 	border-radius: 1em;
 	border-color: #4da6ff;
 	background-color: rgba(128, 191, 255, 0.5);
 	padding: 5px;
 	width: auto;
+    animation-name: erreur;
+    animation-duration: 6s;    
+    animation-iteration-count: 1;
+    animation-direction: alternate;  
 }
+
+@keyframes erreur {
+    0% {left: 100%; opacity : 0;}
+    25% {left: 0%;  opacity : 1;}
+    50% {left: 0%;  opacity : 1;}
+    75% {left: 0%;  opacity : 1;}
+    100% {display: none; left: 100%;  opacity : 0; visibility : hidden;}
+}
+
 .colonne{
 	text-align: center
 }
