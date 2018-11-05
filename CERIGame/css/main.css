@@ -27,6 +27,8 @@ body {
 }
 
 .error {
+    animation-duration: 5s;
+    animation-iteration-count: 1;
     background-color: rgba(255, 150, 150, 0.5);
     border: solid;
     border-color: red;

@@ -4,12 +4,14 @@ function accessDataService($http){
 	* @param url
 	* @returns {*|Promise}
 	*/
-	this.getInfo = function(url){
+	this.getInfo = function(url, callback){
 		// Appel Ajax
 		return $http
 		.get(url)
 		.then(function(response) { //First function handles success
-			return(response.data);
+				console.log("response: ", response.data)
+				callback(response.data);
+				// return(response.data);
 			},
 			function(response) {
 				//Second function handles error
@@ -27,6 +29,7 @@ function AuthService($http, session) {
 				console.log("response:", response.data);
 				var data = response.data;
 				if(typeof data.username !== 'undefined') {
+					console.log('set session')
 					session.setUser({
 						name: data.name,
 						username: data.username,
@@ -61,22 +64,22 @@ function AuthService($http, session) {
 
 function sessionService($log, $window) {
 	// Instantiate data when service is loaded
-	this._user = $window.localStorage.getItem('session.user');
+	this._user = JSON.parse(window.localStorage.getItem('session.user'));
 	this.getUser = function(){
 		return this._user;
 	};
 	this.setUser = function(user){
 		this._user = user;
-		$window.localStorage.setItem('session.user', JSON.stringify(user));
+		window.localStorage.setItem('session.user', JSON.stringify(user));
 		return this;
 	};
 	this.setInfo = function(key, value) {
-		$window.localStorage.setItem('session.' + key, JSON.stringify(value));
+		window.localStorage.setItem('session.' + key, JSON.stringify(value));
 	};
 	this.getInfo = function(key) {
-		return JSON.parse($window.localStorage.getItem('session.' + key));
+		return JSON.parse(window.localStorage.getItem('session.' + key));
 	}
 	this.destroy = function() {
-		$window.localStorage.clear();
+		window.localStorage.clear();
 	}
 }

@@ -18,9 +18,8 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	</head>
 	<body ng-controller="main_controller">
-		
 		<!--<div class="contener" ng-controller="bandeau_controller">-->
-		<div class="contener" ng-hide="notLoggedIn()" ng-show="isLoggedIn()">
+		<div class="contener" ng-hide="no_logged_in" ng-show="isLoggedIn()">
 			<div class="bandeau row">
 				<span class="colonne_Logo col-6">
     				<p> Logo </p>
@@ -29,7 +28,7 @@
     				<p> message </p>
     			</span>
     			<span class="colonne col-2" id="bandeau-nom">
-    				<p> {{ nom }} </p>
+    				<p> {{ user.username }} </p>
     			</span>
     			<span class="colonne col-2">
     				<form ng-submit="logOut()">
@@ -38,10 +37,18 @@
     			</span>
   			</div>
   		</div>
+  		<!--<div ng-view>
+  		</div>-->
+  		<!--<div ng-show="isLoggedIn()">
+	  		<div class="bandeau" ng-controller="quizz_controller">
+	  			<input type="button" ng-click="getQuizzes()">
+				{{ quizzs }}
+			</div>
+		</div>-->
   		<div class="contener">
   			<div class="row {{ classBandeau }}">{{ textBandeau }}</div>
   		</div>
-		<form class= "form-signin" name="login-form" ng-submit="login()" ng-show="notLoggedIn()" ng-hide="isLoggedIn()">
+		<form class= "form-signin" name="login-form" ng-submit="login()" ng-show="no_logged_in" ng-show="notLoggedIn()">
 			<h1 class="text-center">WARNING!</h1>
 			<p class="text-center" id="message-connect">Veuillez-vous identifier</p>
 

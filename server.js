@@ -6,12 +6,16 @@ const pgClient = require('pg');		//BD PGSQL
 const sha1 = require('sha1');	//Crytage des mdp
 const session = require('express-session');	//Gestion des sessions
 const MongoDBStore = require('connect-mongodb-session')(session);	//MongoDB for session
+const MongoClient = require('mongodb').MongoClient; //MongoDB for other
 const path = require('path');
 
 /******** Declaration des variables
 *
 ********/
 const app = express(); // expressJS
+
+const dsnMongoDB = "mongodb://127.0.0.1:27017/db";
+
 app.use(session({
 	//	Initialisation de la session
 	secret: 'ma phrase secrete',
@@ -93,6 +97,35 @@ app.get('/login', function(req, res) {
 app.get('/logout', function(req, res) {
 	req.session.destroy();
 	res.send();
+});
+
+app.get('/quizz', function(req, res) {
+	if(typeof req.session.isConnected === "undefined") {
+		res.send({
+			message: "Accès non autorisé"
+		});
+	} else {
+		res.sendFile(path.join(__dirname + '/CERIGame/app/views/quizz.html'));
+	}
+});
+
+app.get('/quizzList', function(req, res) {
+	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
+		if(err) {
+			return console.log("erreur connexion base de données");
+		}
+		if(mongoClient) {
+			var reqDB = {};
+			mongoClient.db().collection('quizz').find(reqDB).toArray(function(err, data) {
+				if(err) return console.log('erreur base de données');
+				if(data) {
+					console.log('requete ok ');
+					mongoClient.close();
+					res.send(data);
+				}
+			});
+		}
+	});
 });
 
 /*//Loadig js files...
