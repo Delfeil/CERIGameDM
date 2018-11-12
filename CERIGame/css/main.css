@@ -70,14 +70,23 @@ body {
 	box-shadow:0 0 0 .2rem rgba(255, 0, 0, 1);
 }
 
-.bandeau{
-    opacity:0; 
+.bandeau{ 
 	border: solid;
 	border-radius: 1em;
 	border-color: #4da6ff;
 	background-color: rgba(128, 191, 255, 0.5);
 	padding: 5px;
 	width: auto;
+}
+
+.bandeau-notif{
+    opacity:0; 
+    border: solid;
+    border-radius: 1em;
+    border-color: #4da6ff;
+    background-color: rgba(128, 191, 255, 0.5);
+    padding: 5px;
+    width: auto;
     animation-name: erreur;
     animation-duration: 6s;    
     animation-iteration-count: 1;

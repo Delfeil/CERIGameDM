@@ -26,7 +26,7 @@ function main_controller($scope, auth, session) {
 
 	$scope.afficheMessage = function(message) {
 		//$('#bandeau-message').text(message);
-		$scope.classBandeau = "bandeau";
+		$scope.classBandeau = "bandeau-notif";
 
 		$scope.textBandeau = message;
 	}
