@@ -73,12 +73,41 @@ app.get('/login', function(req, res) {
 				console.log('Erreur d’exécution de la requete' + err.stack);
 			} else if ((result.rows[0] != null) && (result.rows[0].motpasse == sha1(req.query.mdp))) {
 				console.log("mot de passe correct");
-
-				req.session.isConnected = true;
-				req.session.username = req.query.login;
-				req.session.name = result.rows[0].nom;
-				req.session.firstName = result.rows[0].prenom;
-				req.session.id = result.rows[0].id;
+				if(typeof req.session.users === "undefined" || req.session.users.length == 0) {
+					req.session.users = [];
+					req.session.users.push( {
+						isConnected: true,
+						username: req.query.login,
+						name: result.rows[0].nom,
+						firstName: result.rows[0].prenom,
+						id: result.rows[0].id
+					});
+				} else {
+					//On cherche si l'utilisateur n'est pas déjà présent dans les utilisateurs enregistrés
+					var found = false;
+					var foundPos = 0;
+					for(var i=0; i<req.session.users.length; i++) {
+						var user = req.session.users[i];
+						if(user.username == req.query.login) {
+							found = true;
+							foundPos = i;
+						}
+					}
+					if(!found) {
+						req.session.users.push( {
+							isConnected: true,
+							username: req.query.login,
+							name: result.rows[0].nom,
+							firstName: result.rows[0].prenom,
+							id: result.rows[0].id
+						});
+					}
+				}
+				// req.session.isConnected = true;
+				// req.session.username = req.query.login;
+				// req.session.name = result.rows[0].nom;
+				// req.session.firstName = result.rows[0].prenom;
+				// req.session.id = result.rows[0].id;
 
 				responseData.name=result.rows[0].nom;
 				responseData.username = req.query.login;

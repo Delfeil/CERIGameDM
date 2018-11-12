@@ -62,7 +62,7 @@ function AuthService($http, session) {
 	}
 }
 
-function sessionService($log, $window) {
+function sessionService($log, $window, accessDataService) {
 	// Instantiate data when service is loaded
 	this._user = JSON.parse(window.localStorage.getItem('session.user'));
 	this.getUser = function(){

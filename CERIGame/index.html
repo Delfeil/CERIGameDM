@@ -21,8 +21,11 @@
 		<!--<div class="contener" ng-controller="bandeau_controller">-->
 		<div class="contener" ng-hide="no_logged_in" ng-show="isLoggedIn()">
 			<div class="bandeau row">
-				<span class="colonne_Logo col-6">
+				<span class="colonne_Logo col-4">
     				<p> Logo </p>
+    			</span>
+    			<span class="colonne col-2">
+    				<input type="button" ng-click="loadQuizz()">
     			</span>
     			<span class="colonne col-2" id="bandeau-message">
     				<p> message </p>
@@ -50,12 +53,33 @@
   		</div>
   		<!--<div ng-view>
   		</div>-->
-  		<!--<div ng-show="isLoggedIn()">
+  		<div ng-show="showQuizz">
 	  		<div class="bandeau" ng-controller="quizz_controller">
-	  			<input type="button" ng-click="getQuizzes()">
-				{{ quizzs }}
+				<div class="quizz-search">
+		  			<input type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
+					<!--{{ quizzs }}-->
+				</div>
+				<div class="row list head">
+					<span class="colonne col-6 quizz-name">
+						Thème
+					</span>
+					<span class="colonne col-6 quizz-redacteur">
+						Rédacteur
+					</span>
+				</div>
+				<div class="row quizz-list" ng-repeat="quizz in quizzs">
+					<!--C'est le quizz: {{ quizz }}-->
+					<div class="quizz-infos">
+						<span class="colonne col-6 quizz-name">
+							{{ quizz['thème'] }}
+						</span>
+						<span class="colonne col-6 quizz-redacteur">
+							{{ quizz['rédacteur'] }}
+						</span>
+					</div>
+				</div>
 			</div>
-		</div>-->
+		</div>
   		<div class="contener">
   			<div class="row {{ classBandeau }}">{{ textBandeau }}</div>
   		</div>
