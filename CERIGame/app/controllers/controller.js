@@ -22,7 +22,13 @@ function main_controller($scope, auth, session) {
 	$scope.nom = "nom";
 	$scope.classBandeau = null;
 
+	$scope.showQuizz = false;
+
 	$scope.textBandeau = null;
+
+	$scope.loadQuizz = function() {
+		$scope.showQuizz = !$scope.showQuizz;
+	}
 
 	$scope.afficheMessage = function(message) {
 		//$('#bandeau-message').text(message);
@@ -83,7 +89,7 @@ function main_controller($scope, auth, session) {
 		return logged;
 	}
 
-	if ($scope.isLoggedIn) {
+	if ($scope.isLoggedIn()) {
 		$scope.no_logged_in = false;
 	}
 }
