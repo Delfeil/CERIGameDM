@@ -13,6 +13,14 @@ function quizz_controller($scope, accessDataService) {
 
 }
 
+function user_controller($scope, session, accessDataService) {
+	$scope.user = null;
+	$scope.getUser = function() {
+		$scope.user = session.getUser();
+	}
+	$scope.getUser();
+}
+
 	// Controller pour login
 function main_controller($scope, auth, session) {
 	$scope.user = null;
@@ -23,6 +31,12 @@ function main_controller($scope, auth, session) {
 	$scope.classBandeau = null;
 
 	$scope.textBandeau = null;
+
+	$scope.showUser = false;
+
+	$scope.loadUser= function(){
+		$scope.showUser = !$scope.showUser;
+	}
 
 	$scope.afficheMessage = function(message) {
 		//$('#bandeau-message').text(message);
@@ -87,3 +101,4 @@ function main_controller($scope, auth, session) {
 		$scope.no_logged_in = false;
 	}
 }
+

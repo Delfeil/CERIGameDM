@@ -28,13 +28,24 @@
     				<p> message </p>
     			</span>
     			<span class="colonne col-2" id="bandeau-nom">
-    				<p> {{ user.username }} </p>
+    				<a ng-click="loadUser()"> {{ user.username }} </a>
     			</span>
     			<span class="colonne col-2">
     				<form ng-submit="logOut()">
     					<input class="deconnect btn btn-primary" id="deconnect" type="submit" value="deconnexion">
 	    			</form>
     			</span>
+  			</div>
+  		</div>
+  		<div class="bandeau" ng-controller="user_controller" ng-show="showUser">
+  			<div> 
+  				Pseudo : {{user.username}}
+  			</div>
+  			<div>
+  				Nom : {{user.name}}
+  			</div>
+  			<div>
+  				Prenom : {{user.firstName}}
   			</div>
   		</div>
   		<!--<div ng-view>

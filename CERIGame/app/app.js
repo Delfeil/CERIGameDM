@@ -5,6 +5,7 @@ var app = angular.module('main', ["ngRoute"])
 	.service("accessDataService", accessDataService) 
 	.service('session', sessionService)
 	.service('auth', AuthService)
+	.controller('user_controller', user_controller)
 	/* .config(function($routeProvider) {
 		$routeProvider.when("/", {controller: "quizz_controller", templateUrl: "/quizz"})
 			.otherwise({redirectTo: "/"});
