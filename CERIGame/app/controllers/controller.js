@@ -22,7 +22,7 @@ function user_controller($scope, session, accessDataService) {
 }
 
 	// Controller pour login
-function main_controller($scope, auth, session) {
+function main_controller($scope, auth, session, accessDataService) {
 	$scope.user = null;
 	$scope.username = null;
 	$scope.password = null;
@@ -45,7 +45,7 @@ function main_controller($scope, auth, session) {
 	}
 
 	$scope.afficheMessage = function(message) {
-		//$('#bandeau-message').text(message);
+		$('#bandeau-message').removeClass("bandeau-notif").removeClass("error");
 		$scope.classBandeau = "bandeau-notif";
 
 		$scope.textBandeau = message;
@@ -56,13 +56,13 @@ function main_controller($scope, auth, session) {
 	}
 
 	$scope.afficheMessageError = function(message) {
-		//$('#message-connect').text(message);
+		$('#bandeau-message').removeClass("bandeau-notif").removeClass("error");
 		$scope.classBandeau = "error";
 
 		$scope.textBandeau = message;
 	}
 
-	$scope.affiche
+	$scope.affiche;
 	$scope.no_logged_in = true;
 
 	$scope.login = function() {
@@ -96,10 +96,13 @@ function main_controller($scope, auth, session) {
 
 	$scope.isLoggedIn = function() {
 		var logged = auth.isLoggedIn();
-		console.warn("logIn: ", logged);
 		if (logged && $scope.user == null) {
 			$scope.user = session.getUser();
-		}
+		}/* else {
+			accessDataService.getInfo("/userConnected", function(data) {
+
+			});
+		}*/
 		return logged;
 	}
 

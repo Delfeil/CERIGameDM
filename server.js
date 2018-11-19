@@ -59,7 +59,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-	console.log('Login: ', req.query.login, " mdp: ", req.query.mdp);
+	//console.log('Login: ', req.query.login, " mdp: ", req.query.mdp);
 	sql= "select * from fredouil.users where identifiant='" + req.query.login + "';";
 	pool.connect(function(err, client, done) {
 		if(err) {console.log('Error connecting to pg server' + err.stack);}
@@ -68,39 +68,35 @@ app.get('/login', function(req, res) {
 		};
 		client.query(sql, function(err, result){
 			var responseData = {};
-			console.log("result: ", result, "mdp: ", sha1(req.query.mdp))
+			//console.log("result: ", result, "mdp: ", sha1(req.query.mdp))
 			if(err) {
 				console.log('Erreur d’exécution de la requete' + err.stack);
 			} else if ((result.rows[0] != null) && (result.rows[0].motpasse == sha1(req.query.mdp))) {
 				console.log("mot de passe correct");
-				if(typeof req.session.users === "undefined" || req.session.users.length == 0) {
-					req.session.users = [];
-					req.session.users.push( {
-						isConnected: true,
+				if(typeof req.session.user === "undefined") {
+					//Si aucuns utilisateur n'est présent dans la bdd MongoDB: on l'incère
+					req.session.user = {
 						username: req.query.login,
 						name: result.rows[0].nom,
 						firstName: result.rows[0].prenom,
-						id: result.rows[0].id
-					});
+						id: result.rows[0].id,
+						last_connect: null
+					};
+					responseData.last_connect = req.session.user.last_connect;
 				} else {
 					//On cherche si l'utilisateur n'est pas déjà présent dans les utilisateurs enregistrés
-					var found = false;
-					var foundPos = 0;
-					for(var i=0; i<req.session.users.length; i++) {
-						var user = req.session.users[i];
-						if(user.username == req.query.login) {
-							found = true;
-							foundPos = i;
-						}
-					}
-					if(!found) {
-						req.session.users.push( {
-							isConnected: true,
+					console.log("un utilisateur a déjà sa session sur MongoDB: ", req.session.user);
+					if(req.session.user.username !== req.query.login) {
+						//Si l'utilisateur n'as pas sa session enregistrée sur MongoDBSession: on écrase la précédente
+						req.session.user = {
 							username: req.query.login,
 							name: result.rows[0].nom,
 							firstName: result.rows[0].prenom,
-							id: result.rows[0].id
-						});
+							id: result.rows[0].id,
+							last_connect: null
+						};
+					} else {
+						responseData.last_connect = req.session.user.last_connect;
 					}
 				}
 				// req.session.isConnected = true;
@@ -124,6 +120,17 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
+	console.log("déconnexion: last_connect: " + req.query.last_connect);
+	if(typeof req.session.user !== "undefined") {
+		req.session.user.last_connect = req.query.last_connect;
+	} else {
+		console.log("utilisateur non présent dans la base de donnée MongoDB...");
+	}
+	//req.session.destroy();
+	res.send();
+});
+
+app.get('/resetMongo', function(req, res) {
 	req.session.destroy();
 	res.send();
 });

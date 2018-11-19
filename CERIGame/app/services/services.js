@@ -48,10 +48,12 @@ function AuthService($http, session) {
 
 	this.logOut = function() {
 		var last_connexion = session.getInfo('last_connect');
+		var user = session.getUser();
 		session.destroy();
 		session.setInfo('last_connect', last_connexion);
+		console.log("last_connexion: ", last_connexion.last_connect)
 		return $http
-			.get('/logout')
+			.get('/logout?last_connect=' + last_connexion.last_connect)
 			.then(function(response) {
 				return(response.data);
 			});
