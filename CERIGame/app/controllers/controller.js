@@ -16,13 +16,24 @@ function quizz_controller($scope, accessDataService) {
 function user_controller($scope, session, accessDataService) {
 	$scope.user = null;
 	$scope.getUser = function() {
+
+		console.log("Recup user");
 		$scope.user = session.getUser();
 	}
 	$scope.getUser();
+
+	$scope.$on('recupUser', function() {
+		console.log("click event :");
+		$scope.getUser();
+	});
+
+	// $('#user-show').on('click', function() {
+	// 	$scope.getUser();
+	// });
 }
 
 	// Controller pour login
-function main_controller($scope, auth, session) {
+function main_controller($scope, auth, session, $rootScope) {
 	$scope.user = null;
 	$scope.username = null;
 	$scope.password = null;
@@ -38,6 +49,8 @@ function main_controller($scope, auth, session) {
 
 	$scope.loadUser= function(){
 		$scope.showUser = !$scope.showUser;
+		console.log("emission event")
+		$rootScope.$broadcast('recupUser');
 	}
 
 	$scope.loadQuizz = function() {
@@ -85,18 +98,18 @@ function main_controller($scope, auth, session) {
 		console.log('logOut')
 		$scope.user = null;
 		$scope.no_logged_in = true;
+		$scope.showUser=false;
+		$scope.showQuizz=false;
 		return auth.logOut();
 	}
 
 	$scope.notLoggedIn = function() {
 		var logged = !auth.isLoggedIn();
-		console.warn("notLogIn: ", logged);
 		return logged;
 	}	
 
 	$scope.isLoggedIn = function() {
 		var logged = auth.isLoggedIn();
-		console.warn("logIn: ", logged);
 		if (logged && $scope.user == null) {
 			$scope.user = session.getUser();
 		}
