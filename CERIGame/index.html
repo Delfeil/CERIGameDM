@@ -31,7 +31,7 @@
     				<p> message </p>
     			</span>
     			<span class="colonne col-2" id="bandeau-nom">
-    				<a ng-click="loadUser()"> {{ user.username }} </a>
+    				<a ng-click="loadUser()" id="user-show"> {{ user.username }} </a>
     			</span>
     			<span class="colonne col-2">
     				<form ng-submit="logOut()">
@@ -40,17 +40,19 @@
     			</span>
   			</div>
   		</div>
-  		<div class="bandeau" ng-controller="user_controller" ng-show="showUser">
-  			<div> 
-  				Pseudo : {{user.username}}
-  			</div>
-  			<div>
-  				Nom : {{user.name}}
-  			</div>
-  			<div>
-  				Prenom : {{user.firstName}}
-  			</div>
-  		</div>
+  		<div ng-show="showUser">
+	  		<div class="bandeau" ng-controller="user_controller">
+	  			<div> 
+	  				Pseudo : {{user.username}}
+	  			</div>
+	  			<div>
+	  				Nom : {{user.name}}
+	  			</div>
+	  			<div>
+	  				Prenom : {{user.firstName}}
+	  			</div>
+	  		</div>
+	  	</div>
   		<!--<div ng-view>
   		</div>-->
   		<div ng-show="showQuizz">
@@ -101,18 +103,18 @@
 		</form>
 	</body>
 	<script type="text/javascript">
-		$('#connect').on('click', function(){
-			var username = $('#login').val();
-			var mdp = $('#password').val();
-			console.log("Event click connect:login:", username, " mdp:", mdp);
-			angular.element($("body")).scope().username = username;
-			angular.element($("body")).scope().password = mdp;
-			// $.ajax({
-			// 	type: 'GET',
-			// 	url: '/login?login=' + login + '&mdp=' + mdp,
-			// }).done(function(data) {
-			// 	console.log("result:", data);
-			// });
-		});
+		// $('#connect').on('click', function(){
+		// 	var username = $('#login').val();
+		// 	var mdp = $('#password').val();
+		// 	console.log("Event click connect:login:", username, " mdp:", mdp);
+		// 	angular.element($("body")).scope().username = username;
+		// 	angular.element($("body")).scope().password = mdp;
+		// 	// $.ajax({
+		// 	// 	type: 'GET',
+		// 	// 	url: '/login?login=' + login + '&mdp=' + mdp,
+		// 	// }).done(function(data) {
+		// 	// 	console.log("result:", data);
+		// 	// });
+		// });
 	</script>
 </html>
