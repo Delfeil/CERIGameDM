@@ -53,35 +53,83 @@
 	  			</div>
 	  		</div>
 	  	</div>
-  		<!--<div ng-view>
-  		</div>-->
+	  	
+	  	<!--
+	  		-------------------------------
+	  		Parite quizzs 
+	  		-------------------------------
+	  	 -->
   		<div ng-show="showQuizz">
 	  		<div class="bandeau" ng-controller="quizz_controller">
-				<div class="quizz-search">
-		  			<input type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
-					<!--{{ quizzs }}-->
-				</div>
-				<div class="row list head">
-					<span class="colonne col-6 quizz-name">
-						Thème
-					</span>
-					<span class="colonne col-6 quizz-redacteur">
-						Rédacteur
-					</span>
-				</div>
-				<div class="row quizz-list" ng-repeat="quizz in quizzs">
-					<!--C'est le quizz: {{ quizz }}-->
-					<div class="quizz-infos">
+	  			<div ng-show="searchQuizz">
+	  				<div class="select-difficilte">
+	  					<span ng-click="setDifficulte('facile')">
+	  						Facile
+	  					</span>
+	  					<span ng-click="setDifficulte('normal')">
+	  						Normal
+	  					</span>
+	  					<span ng-click="setDifficulte('difficile')">
+	  						Difficile
+	  					</span>
+	  				</div>
+					<div class="quizz-search">
+			  			<input type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
+						<!--{{ quizzs }}-->
+					</div>
+					<div class="row list head">
 						<span class="colonne col-6 quizz-name">
-							{{ quizz['thème'] }}
+							Thème
 						</span>
 						<span class="colonne col-6 quizz-redacteur">
-							{{ quizz['rédacteur'] }}
+							Rédacteur
+						</span>
+					</div>
+					<div class="row quizz-list" ng-repeat="quizz in quizzs">
+						<!--C'est le quizz: {{ quizz }}-->
+						<div class="quizz-infos" ng-click="playQuizz(quizz, 'facile')">
+							<span class="colonne col-6 quizz-name">
+								{{ quizz['thème'] }}
+							</span>
+							<span class="colonne col-6 quizz-redacteur">
+								{{ quizz['rédacteur'] }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div ng-show="questionQuizz">
+					<div class="row quizz-question">
+						<div class="question">
+							{{ question['question'] }}
+						</div>
+						<div class="propositions"  ng-repeat="proposition in questionAffiche">
+							<span class="proposition-elem" ng-click="reponse(proposition)">
+								{{ proposition }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div ng-show="showEnd">
+					<div class="resultat">
+						<span>
+							score : 
+						</span>
+						<span>
+							{{ score }}
 						</span>
 					</div>
 				</div>
 			</div>
 		</div>
+		<!-- 
+			-------------------------------
+			Fin partie quizzs
+			-------------------------------
+		 -->
+
+
   		<div class="contener">
   			<div class="row {{ classBandeau }}" id="bandeau-message">{{ textBandeau }}</div>
   		</div>
