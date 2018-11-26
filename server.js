@@ -60,7 +60,7 @@ app.get('/', function(req, res) {
 
 app.get('/login', function(req, res) {
 	//console.log('Login: ', req.query.login, " mdp: ", req.query.mdp);
-	sql= "select * from fredouil.users where identifiant='" + req.query.login + "';";
+	var sql= "select * from fredouil.users where identifiant='" + req.query.login + "';";
 	pool.connect(function(err, client, done) {
 		if(err) {console.log('Error connecting to pg server' + err.stack);}
 		else{
@@ -162,6 +162,63 @@ app.get('/quizzList', function(req, res) {
 			});
 		}
 	});
+});
+
+app.get('/historique', function(req, res) {
+	if(typeof req.session.user !== 'undefined') {
+		var sql= "select * from fredouil.historique where id_users='" + req.session.user.id + "';";
+		pool.connect(function(err, client, done) {
+			if(err) {
+				console.log('Error connecting to pg server' + err.stack);
+			} else {
+				console.log('Connection established with pg db server');
+			}
+			client.query(sql, function(err, result){
+				var responseData = {};
+				//console.log("result: ", result, "mdp: ", sha1(req.query.mdp))
+				if(err) {
+					console.log('Erreur d’exécution de la requete' + err.stack);
+				} else if (result.rows[0] != null) {
+					console.log("requete réussie: " + JSON.stringify(result));
+					var scoreTotal = 0;
+					for(var row in rows) {
+						scoreTotal += row.score;
+					}
+					responseData.scoreTotal = scoreTotal;
+				}
+				res.send(responseData);
+			});
+			client.release();
+		});
+	}
+});
+
+app.get('/saveScore', function(req, res) {
+	console.log("save score")
+	var score = req.query.score;
+	var idQuizz = req.query.idQuizz;
+	var nbBonneReponse = req.query.nbReponse;
+	var tempS = req.query.tempS;
+	var sql= "insert into fredouil.historique ( id_users, date, nbreponse, temps, score) values ('" + req.session.user.id + "', LOCALTIMESTAMP, '" + nbBonneReponse + "', '" + tempS + "', '" + score + "');";
+	console.log("save score, sql: ", sql)
+	pool.connect(function(err, client, done) {
+			if(err) {
+				console.log('Error connecting to pg server' + err.stack);
+			} else {
+				console.log('Connection established with pg db server');
+			}
+			client.query(sql, function(err, result){
+				var responseData = {};
+				//console.log("result: ", result)
+				if(err) {
+					console.log('Erreur d’exécution de la requete' + err.stack);
+				} else {
+					responseData.statusMsg = "Sauvegarde du score";
+				}
+				res.send(responseData);
+			});
+			client.release();
+		});
 });
 
 /*//Loadig js files...

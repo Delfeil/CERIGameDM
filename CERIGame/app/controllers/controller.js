@@ -22,6 +22,8 @@ function quizz_controller($scope, session, accessDataService) {
 
 	$scope.numQuestion = -1;
 
+	$scope.tempS = 0;
+
 	$scope.difficulte = "facile";
 
 	$scope.setDifficulte = function(difficulte) {
@@ -102,8 +104,11 @@ function quizz_controller($scope, session, accessDataService) {
 	$scope.endQuizz = function() {
 		console.log("fin: ", $scope.debut);
 		var endTime = Date.now();
-		var timeS = Math.floor((endTime - $scope.debut)/1000);
-		$scope.score = Math.round(($scope.nbBonneReponse*1398.2)/timeS);
+		$scope.tempS = Math.floor((endTime - $scope.debut)/1000);
+		$scope.score = Math.round(($scope.nbBonneReponse*1398.2)/$scope.tempS);
+		accessDataService.getInfo('/saveScore?idQuizz=' + $scope.selectedQuizz._id + "&score=" + $scope.score + "&nbReponse=" + $scope.nbBonneReponse + "&tempS=" + $scope.tempS, function(data) {
+			console.log("result: ", data)
+		});
 	}
 }
 
