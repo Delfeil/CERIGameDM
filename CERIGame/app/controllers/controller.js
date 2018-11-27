@@ -2,6 +2,7 @@
 function bandeau_controller($scope, session) {
 }
   
+//-----------Controleu quizz
 function quizz_controller($scope, session, accessDataService) {
 	$scope.quizzs = null;
 	$scope.searchQuizz = true;
@@ -26,6 +27,11 @@ function quizz_controller($scope, session, accessDataService) {
 
 	$scope.difficulte = "facile";
 
+	$scope.chronoStop = false;
+	$scope.nbH = 0;
+	$scope.nbM = 0;
+	$scope.nbS = 0;
+
 	$scope.setDifficulte = function(difficulte) {
 		$scope.difficulte = difficulte;
 	}
@@ -42,12 +48,54 @@ function quizz_controller($scope, session, accessDataService) {
 		}
 	}
 
+	/*$scope.chrono = function() {
+		console.log("chrono: ")
+		var beginTime = $scope.debut;
+		while(!$scope.chronoStop) {
+			var curTime = Date.now();
+			var timeSpend = curTime - beginTime;
+			var secondes = timeSpend/1000;
+			var minutes = secondes/60;
+			var trueSecondes = Math.round(secondes%60);
+			var heures = Math.round(minutes/60);
+			var trueMinutes = Math.round(minutes%60);
+			$scope.nbH = heures;
+			$scope.nbM = trueMinutes;
+			$scope.nbS = trueSecondes;
+			sleep(1000);
+		}
+	}*/
+
+	$scope.chrono = function() {
+		console.log("chrono: ")
+		var beginTime = $scope.debut;
+		if($scope.chronoStop) {
+			console.log("chrono finis")
+		} else {
+			var curTime = Date.now();
+			var timeSpend = curTime - beginTime;
+			var secondes = timeSpend/1000;
+			var minutes = secondes/60;
+			var trueSecondes = Math.round(secondes%60);
+			var heures = Math.round(minutes/60);
+			var trueMinutes = Math.round(minutes%60);
+			$scope.nbH = heures;
+			$scope.nbM = trueMinutes;
+			$scope.nbS = trueSecondes;
+			setTimeout($scope.chrono, 1000);
+		}
+	}
+
 	$scope.playQuizz = function(quizz) {
 		$scope.searchQuizz = false;
 		$scope.questionQuizz = true;
+		$scope.nbH = 0;
+		$scope.nbM = 0;
+		$scope.nbS = 0;
 
 		$scope.selectedQuizz = quizz;
 		$scope.debut = Date.now();
+		$scope.chrono();
 		$scope.nextQuestion();
 	}
 
@@ -102,6 +150,7 @@ function quizz_controller($scope, session, accessDataService) {
 	}
 
 	$scope.endQuizz = function() {
+		$scope.chronoStop = true;
 		console.log("fin: ", $scope.debut);
 		var endTime = Date.now();
 		$scope.tempS = Math.floor((endTime - $scope.debut)/1000);
@@ -110,8 +159,40 @@ function quizz_controller($scope, session, accessDataService) {
 			console.log("result: ", data)
 		});
 	}
+
+	$scope.$on('showQuizz', function() {
+		//Initialisation des quizzs
+		console.log("click event : showQuizz");
+		$scope.quizzs = null;
+		$scope.searchQuizz = true;
+		$scope.questionQuizz = false;
+		$scope.showEnd = false;
+
+
+		$scope.selectedQuizz = null;
+		$scope.question = null;
+		$scope.questionAffiche = null;
+
+		$scope.debut = null;
+		$scope.nbBonneReponse = 0;
+
+		$scope.nbQuestion = 5;
+
+		$scope.score = 0;
+
+		$scope.numQuestion = -1;
+
+		$scope.tempS = 0;
+
+		$scope.difficulte = "facile";
+		$scope.chronoStop = false;
+		$scope.nbH = 0;
+		$scope.nbM = 0;
+		$scope.nbS = 0;
+	});
 }
 
+//---------Controlleur view users
 function user_controller($scope, session, accessDataService) {
 	$scope.user = null;
 	$scope.getUser = function() {
@@ -131,8 +212,7 @@ function user_controller($scope, session, accessDataService) {
 	// });
 }
 
-	// Controller pour login
-
+//------------Controleur principal
 function main_controller($scope, auth, session, accessDataService, $rootScope) {
 	$scope.user = null;
 	$scope.username = null;
@@ -155,6 +235,7 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 
 	$scope.loadQuizz = function() {
 		$scope.showQuizz = !$scope.showQuizz;
+		$rootScope.$broadcast('showQuizz');
 	}
 
 	$scope.afficheMessage = function(message) {
