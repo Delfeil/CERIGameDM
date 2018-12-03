@@ -195,8 +195,10 @@ function quizz_controller($scope, session, accessDataService) {
 //---------Controlleur view users
 function user_controller($scope, session, accessDataService) {
 	$scope.user = null;
-	$scope.getUser = function() {
+	$scope.bestScores = null;
+	$scope.sumScore = null;
 
+	$scope.getUser = function() {
 		console.log("Recup user");
 		$scope.user = session.getUser();
 	}
@@ -206,6 +208,20 @@ function user_controller($scope, session, accessDataService) {
 		console.log("click event :");
 		$scope.getUser();
 	});
+
+	$scope.getBest = function() {
+		accessDataService.getInfo('/bestScore?idUser=' + $scope.user._id, function(data) {
+			console.log("result: getBest", data)
+			$scope.bestScores = data.bestScores;
+		});
+	}
+
+	$scope.sumScore = function() {
+		accessDataService.getInfo('/sumScore?idUser=' + $scope.user._id, function(data) {
+			console.log("result: getBest", data)
+			$scope.sumScore = data.sumScore;
+		});
+	}
 
 	// $('#user-show').on('click', function() {
 	// 	$scope.getUser();

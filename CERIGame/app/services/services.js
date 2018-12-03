@@ -34,7 +34,8 @@ function AuthService($http, session) {
 						name: data.name,
 						username: data.username,
 						firstName: data.firstName,
-						_id: data.id
+						_id: data.id,
+						avatar: data.avatar
 					});
 					session.setInfo('last_connect', {
 						last_connect: new Date()

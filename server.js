@@ -80,7 +80,8 @@ app.get('/login', function(req, res) {
 						name: result.rows[0].nom,
 						firstName: result.rows[0].prenom,
 						id: result.rows[0].id,
-						last_connect: null
+						last_connect: null,
+						avatar: result.rows[0].avatar
 					};
 					responseData.last_connect = req.session.user.last_connect;
 				} else {
@@ -93,7 +94,8 @@ app.get('/login', function(req, res) {
 							name: result.rows[0].nom,
 							firstName: result.rows[0].prenom,
 							id: result.rows[0].id,
-							last_connect: null
+							last_connect: null,
+							avatar: result.rows[0].avatar
 						};
 					} else {
 						responseData.last_connect = req.session.user.last_connect;
@@ -106,9 +108,11 @@ app.get('/login', function(req, res) {
 				// req.session.id = result.rows[0].id;
 
 				responseData.name=result.rows[0].nom;
+				responseData.id=result.rows[0].id;
 				responseData.username = req.query.login;
 				responseData.firstName = result.rows[0].prenom;
 				responseData.statusMsg='Connexion réussie : bonjour ' + result.rows[0].prenom;
+				responseData.avatar= result.rows[0].avatar;
 			} else {
 				console.log('Connexion échouée : informations de connexion incorrecte');
 				responseData.statusMsg='Connexion échouée : informations de connexion incorrecte';
@@ -219,6 +223,115 @@ app.get('/saveScore', function(req, res) {
 			});
 			client.release();
 		});
+});
+
+app.get('/top10_best', function(req, res) {
+	var sql= "select DISTINCT(id_users), score, date, temps, nbreponse, identifiant, nom, prenom, avatar from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id order by score DESC FETCH FIRST 10  ROWS ONLY;";
+	pool.connect(function(err, client, done) {
+		if(err) {
+			console.log('Error connecting to pg server' + err.stack);
+		} else {
+			console.log('Connection established with pg db server');
+		}
+		client.query(sql, function(err, result){
+			var responseData = {};
+			console.log("result: top10 best ", result)
+			if(err) {
+				console.log('Erreur d’exécution de la requete' + err.stack);
+			} else if (result.rows[0] != null) {
+				console.log("requete réussie: " + JSON.stringify(result));
+				responseData.topBest = result.rows;
+			}
+			res.send(responseData);
+		});
+		client.release();
+	});
+});
+
+app.get('/top10_tot', function(req, res) {
+	// var sql= "select SUM(score) as somme_score, id_users from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id group by id_users order by somme_score DESC FETCH FIRST 10 ROWS ONLY;";
+	var sql= "select SUM(score) as somme_score, id_users, identifiant, avatar from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id group by id_users, identifiant, avatar order by somme_score DESC FETCH FIRST 10 ROWS ONLY;";
+	pool.connect(function(err, client, done) {
+		if(err) {
+			console.log('Error connecting to pg server' + err.stack);
+		} else {
+			console.log('Connection established with pg db server');
+		}
+		client.query(sql, function(err, result){
+			var responseData = {};
+			console.log("result: top 10 sumScore", result)
+			if(err) {
+				console.log('Erreur d’exécution de la requete' + err.stack);
+			} else if (result.rows[0] != null) {
+				console.log("requete réussie: " + JSON.stringify(result));
+				responseData.topSum = result.rows;
+			}
+			res.send(responseData);
+		});
+		client.release();
+	});
+});
+
+app.get('/sumScore', function(req, res) {
+	var idUser = req.query.idUser;
+	if(typeof idUser == "undefined") {
+		res.send({
+			message: "erreur d'argument"
+		});
+		return;
+	}
+	var sql= "select SUM(score) from fredouil.historique where id_users= "+idUser+";";
+	pool.connect(function(err, client, done) {
+		if(err) {
+			console.log('Error connecting to pg server' + err.stack);
+		} else {
+			console.log('Connection established with pg db server');
+		}
+		client.query(sql, function(err, result){
+			var responseData = {};
+			console.log("result: scoreTotal ", result)
+			if(err) {
+				console.log('Erreur d’exécution de la requete' + err.stack);
+			} else if (result.rows[0] != null) {
+				console.log("requete réussie: " + JSON.stringify(result));
+				responseData.sumScore = result.rows[0].sum;
+			}
+			res.send(responseData);
+		});
+		client.release();
+	});
+});
+
+app.get('/bestScore', function(req, res) {
+	var idUser = req.query.idUser;
+	if(typeof idUser == "undefined") {
+		res.send({
+			message: "erreur d'argument"
+		});
+		return;
+	}
+	console.log("erreur: ", typeof idUser)
+	// var sql= "select * from fredouil.historique where id_users =" + idUser + " order by score DESC FETCH FIRST 3 ROWS ONLY;";
+	var sql = "select * from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id where id_users = " + idUser + " order by score DESC FETCH FIRST 3 ROWS ONLY;"
+	pool.connect(function(err, client, done) {
+		if(err) {
+			console.log('Error connecting to pg server' + err.stack);
+		} else {
+			console.log('Connection established with pg db server');
+		}
+		client.query(sql, function(err, result){
+			var responseData = {};
+			console.log("result: user bests Scores ", result)
+			if(err) {
+				console.log('Erreur d’exécution de la requete' + err.stack);
+			} else if (result.rows[0] != null) {
+				console.log("requete réussie: " + JSON.stringify(result));
+				responseData.bestScores = result.rows;
+			}
+			res.send(responseData);
+		});
+		client.release();
+	});
 });
 
 /*//Loadig js files...
