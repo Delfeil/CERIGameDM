@@ -76,7 +76,9 @@ body {
 	border-color: #4da6ff;
 	background-color: rgba(128, 191, 255, 0.5);
 	padding: 5px;
-	width: auto;
+	width: 97%;
+	margin-left: auto;
+  	margin-right: auto;
 }
 
 .bandeau-notif{
@@ -110,9 +112,6 @@ body {
 }
 
 .contener{
-	width: 97%;
-	margin-left: auto;
-  	margin-right: auto;
   	margin-top: 5px;
 	color:white;
 }
@@ -122,6 +121,15 @@ body {
 	border-color: #004466;
 }
 
+.difficulte{
+	background-color: #004466;
+	border-color: #004466;
+}
+
+.selection{
+	text-align:center;
+}
+
 .deconnect:hover {
     background-color: #004466;
     border-color: #004466;
@@ -129,4 +137,14 @@ body {
 
 .deconnect:focus {
 	box-shadow:0 0 0 .2rem rgba(77, 166, 255, 1);
+}
+
+.texte-quizz{
+	color:white;
+	font-weight: bold;
+}
+
+.texte-question{
+	text-align: center;
+	color:white;
 }

@@ -56,28 +56,31 @@
 	  	
 	  	<!--
 	  		-------------------------------
-	  		Parite quizzs 
+	  		Partie quizzs 
 	  		-------------------------------
 	  	 -->
   		<div ng-show="showQuizz">
 	  		<div class="bandeau" ng-controller="quizz_controller">
 	  			<div ng-show="searchQuizz">
-	  				<div class="select-difficilte">
-	  					<span ng-click="setDifficulte('facile')">
-	  						Facile
+	  				<div class="select-difficilte selection">
+	  					<span class="difficulte ">
+	  						<input class="btn btn-primary" type="button" ng-click="setDifficulte('facile')" value="Facile">
+							<!--Facile-->
 	  					</span>
-	  					<span ng-click="setDifficulte('normal')">
-	  						Normal
+	  					<span class="difficulte ">
+							<input class="btn btn-primary" type="button" ng-click="setDifficulte('normal')" value="Normale">
+	  						<!--Normal-->
 	  					</span>
-	  					<span ng-click="setDifficulte('difficile')">
-	  						Difficile
+	  					<span class="difficulte ">
+							<input class="btn btn-primary" type="button" ng-click="setDifficulte('difficile')" value="Difficile">
+	  						<!--Difficile-->
 	  					</span>
 	  				</div>
 					<div class="quizz-search">
 			  			<input type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
 						<!--{{ quizzs }}-->
 					</div>
-					<div class="row list head">
+					<div class="texte-quizz row list head">
 						<span class="colonne col-6 quizz-name">
 							Thème
 						</span>
@@ -88,10 +91,10 @@
 					<div class="row quizz-list" ng-repeat="quizz in quizzs">
 						<!--C'est le quizz: {{ quizz }}-->
 						<div class="quizz-infos" ng-click="playQuizz(quizz, 'facile')">
-							<span class="colonne col-6 quizz-name">
+							<span class="texte-quizz colonne col-6 quizz-name">
 								{{ quizz['thème'] }}
 							</span>
-							<span class="colonne col-6 quizz-redacteur">
+							<span class="texte-quizz colonne col-6 quizz-redacteur">
 								{{ quizz['rédacteur'] }}
 							</span>
 						</div>
@@ -102,12 +105,15 @@
 					<div class="timer">
 						{{ nbH }} : {{ nbM }} : {{ nbS }}
 					</div>
-					<div class="row quizz-question">
-						<div class="question">
+					<div class="row texte-quizz colonne col-12 quizz-name">
+						{{ quizz['thème'] }}
+					</div>
+					<div class="quizz-question">
+						<div class="texte-question colonne col-12 row question">
 							{{ question['question'] }}
 						</div>
 						<div class="propositions"  ng-repeat="proposition in questionAffiche">
-							<span class="proposition-elem" ng-click="reponse(proposition)">
+							<span class="texte-question colonne col-12 row proposition-elem" ng-click="reponse(proposition)">
 								{{ proposition }}
 							</span>
 						</div>
