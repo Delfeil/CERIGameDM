@@ -36,7 +36,9 @@ body {
     border-radius: 1em;
     color:white;
     padding: 5px;
-    width: auto;
+    width: 97%;
+	margin-left: auto;
+  	margin-right: auto;
     animation-name: erreur;
     animation-duration: 6s;    
     animation-iteration-count: 1;
@@ -88,7 +90,9 @@ body {
     border-color: #4da6ff;
     background-color: rgba(128, 191, 255, 0.5);
     padding: 5px;
-    width: auto;
+    width: 97%;
+	margin-left: auto;
+  	margin-right: auto;
     animation-name: erreur;
     animation-duration: 6s;    
     animation-iteration-count: 1;
@@ -147,4 +151,12 @@ body {
 .texte-question{
 	text-align: center;
 	color:white;
+}
+
+.users{
+	margin-top: auto;
+}
+
+.quizz{
+	margin-top: auto;
 }
