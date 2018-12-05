@@ -337,12 +337,14 @@ app.get('/bestScore', function(req, res) {
 app.get('/updateUser', function(req, res) {
 	var sql = "UPDATE fredouil.users SET ";
 	var precedent = false;
+	var empty = true;
 	if(typeof req.query.identifiant !== "undefined") {
 		if(precedent) {
 			sql +=", ";
 		}
 		sql+="identifiant='" + req.query.identifiant + "' ";
 		precedent = true;
+		empty = false;
 	}
 	if(typeof req.query.nom !== "undefined") {
 		if(precedent) {
@@ -350,6 +352,7 @@ app.get('/updateUser', function(req, res) {
 		}
 		sql+="nom='" + req.query.nom + "' ";
 		precedent = true;
+		empty = false;
 	}
 	if(typeof req.query.prenom !== "undefined") {
 		if(precedent) {
@@ -357,6 +360,7 @@ app.get('/updateUser', function(req, res) {
 		}
 		sql+="prenom='" + req.query.prenom + "' ";
 		precedent = true;
+		empty = false;
 	}
 	if(typeof req.query.avatar !== "undefined") {
 		if(precedent) {
@@ -364,8 +368,15 @@ app.get('/updateUser', function(req, res) {
 		}
 		sql+="avatar='" + req.query.avatar + "' ";
 		precedent = true;
+		empty = false;
 	}
-
+	if(empty) {
+		console.log("Rien à modifier");
+		res.send({
+			message: "erreur, Rien à modifier"
+		});
+		return;
+	}
 	if(typeof req.session.user.id == "undefined") {
 		res.send({
 			message: "erreur d'argument"
@@ -376,6 +387,10 @@ app.get('/updateUser', function(req, res) {
 	pool.connect(function(err, client, done) {
 		if(err) {
 			console.log('Error connecting to pg server' + err.stack);
+			res.send({
+				message: 'Error connecting to pg server' + err.stack
+			});
+			return;
 		} else {
 			console.log('Connection established with pg db server');
 		}
@@ -384,6 +399,10 @@ app.get('/updateUser', function(req, res) {
 			console.log("result: user bests Scores ", result)
 			if(err) {
 				console.log('Erreur d’exécution de la requete' + err.stack);
+				res.send({
+					message: 'Erreur d’exécution de la requete' + err.stack
+				});
+				return;
 			} else {
 				console.log("Modifications réussies: " + JSON.stringify(result));
 				responseData.userModif = {};
