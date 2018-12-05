@@ -198,6 +198,13 @@ function user_controller($scope, session, accessDataService) {
 	$scope.bestScores = null;
 	$scope.sumScore = null;
 
+	$scope.identifiant = null;
+	$scope.nom = null;
+	$scope.prenom = null;
+	$scope.avatar = null;
+
+	$scope.modifResult = "";
+
 	$scope.getUser = function() {
 		console.log("Recup user");
 		$scope.user = session.getUser();
@@ -220,6 +227,62 @@ function user_controller($scope, session, accessDataService) {
 		accessDataService.getInfo('/sumScore?idUser=' + $scope.user._id, function(data) {
 			console.log("result: getBest", data)
 			$scope.sumScore = data.sumScore;
+		});
+	}
+
+	$scope.modifUser = function() {
+		console.log("modif user")
+		var url = "/updateUser?";
+		var precedent = false;
+		if($scope.identifiant !== null && $scope.identifiant !== "" && $scope.identifiant !== $scope.user.username) {
+			if(precedent) {
+				url += "&";
+			}
+			url+="identifiant=" + $scope.identifiant;
+			precedent = true;
+		}
+		if($scope.nom !== null && $scope.nom !== "" && $scope.nom !== $scope.user.name) {
+			if(precedent) {
+				url += "&";
+			}
+			url+="nom=" + $scope.nom;
+			precedent = true;
+		}
+		if($scope.prenom !== null && $scope.prenom !== "" && $scope.prenom !== $scope.user.firstName) {
+			if(precedent) {
+				url += "&";
+			}
+			url+="prenom=" + $scope.prenom;
+			precedent = true;
+		}
+		if($scope.avatar !== null && $scope.avatar !== "" && $scope.avatar !== $scope.user.avatar) {
+			if(precedent) {
+				url += "&";
+			}
+			url+="avatar=" + $scope.avatar;
+			precedent = true;
+		}
+
+		console.log("modif user, url: ", url)
+		accessDataService.getInfo(url, function(data) {
+			console.log("result: ", data);
+
+			if(data.message == "modifications validées") {
+				if(typeof data.userModif.username !== "undefined") {
+					$scope.user.username = data.userModif.username;
+				}
+				if(typeof data.userModif.name !== "undefined") {
+					$scope.user.name = data.userModif.name;
+				}
+				if(typeof data.userModif.firstName !== "undefined") {
+					$scope.user.firstName = data.userModif.firstName;
+				}
+				if(typeof data.userModif.avatar !== "undefined") {
+					$scope.user.avatar = data.userModif.avatar;
+				}
+				session.setUser($scope.user);
+				console.log("session modifiée: ", session.getUser());
+			}
 		});
 	}
 

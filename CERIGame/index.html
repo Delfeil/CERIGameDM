@@ -54,6 +54,27 @@
 	  			<!-- Test controleur requetes -->
 	  			<!-- <div ng-click="getBest()">Les meilleurs scores</div> -->
 	  			<!-- <div ng-click="sumScore()">Le score total</div> -->
+	  			<div class="form-modif">
+		  			<form class= "form-modif-user" name="modif-user-form" ng-submit="modifUser()">
+				  		<div class="form-row">
+				    		<div class="col">	
+								<input class="form-control" id='identifiant' type="texte" placeholder="identifiant" name="identifiant" ng-model="identifiant" value="{{user.username}}">
+							</div>
+							<div class="col">	
+								<input class="form-control" id='nom' type="texte" placeholder="nom" name="nom" ng-model="nom" value="{{user.name}}">
+							</div>
+							<div class="col">	
+								<input class="form-control" id='prenom' type="texte" placeholder="prenom" name="prenom" ng-model="prenom" value="{{user.firstName}}">
+							</div>
+							<div class="col">	
+								<input class="form-control" id='avatar' type="texte" placeholder="avatar" name="avatar" ng-model="avatar" value="{{user.avatar}}">
+							</div>
+							<div class="col">
+								<input class="modif-user btn btn-primary" id="modif-user" type="submit" value="Modifier">
+							</div>
+						</div>
+					</form>
+				</div>
 	  		</div>
 	  	</div>
 	  	

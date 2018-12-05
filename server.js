@@ -334,6 +334,83 @@ app.get('/bestScore', function(req, res) {
 	});
 });
 
+app.get('/updateUser', function(req, res) {
+	var sql = "UPDATE fredouil.users SET ";
+	var precedent = false;
+	if(typeof req.query.identifiant !== "undefined") {
+		if(precedent) {
+			sql +=", ";
+		}
+		sql+="identifiant='" + req.query.identifiant + "' ";
+		precedent = true;
+	}
+	if(typeof req.query.nom !== "undefined") {
+		if(precedent) {
+			sql +=", ";
+		}
+		sql+="nom='" + req.query.nom + "' ";
+		precedent = true;
+	}
+	if(typeof req.query.prenom !== "undefined") {
+		if(precedent) {
+			sql +=", ";
+		}
+		sql+="prenom='" + req.query.prenom + "' ";
+		precedent = true;
+	}
+	if(typeof req.query.avatar !== "undefined") {
+		if(precedent) {
+			sql +=", ";
+		}
+		sql+="avatar='" + req.query.avatar + "' ";
+		precedent = true;
+	}
+
+	if(typeof req.session.user.id == "undefined") {
+		res.send({
+			message: "erreur d'argument"
+		});
+		return;
+	}
+	sql = sql + "WHERE id = '" + req.session.user.id + "';";
+	pool.connect(function(err, client, done) {
+		if(err) {
+			console.log('Error connecting to pg server' + err.stack);
+		} else {
+			console.log('Connection established with pg db server');
+		}
+		client.query(sql, function(err, result){
+			var responseData = {};
+			console.log("result: user bests Scores ", result)
+			if(err) {
+				console.log('Erreur d’exécution de la requete' + err.stack);
+			} else {
+				console.log("Modifications réussies: " + JSON.stringify(result));
+				responseData.userModif = {};
+				responseData.message = "modifications validées";
+				if(typeof req.query.identifiant !== "undefined") {
+					req.session.user.username = req.query.identifiant;
+					responseData.userModif.username = req.query.identifiant;
+				}
+				if(typeof req.query.nom !== "undefined") {
+					req.session.user.name = req.query.nom;
+					responseData.userModif.name = req.query.nom;
+				}
+				if(typeof req.query.prenom !== "undefined") {
+					req.session.user.firstName = req.query.prenom;
+					responseData.userModif.firstName = req.query.prenom;
+				}
+				if(typeof req.query.avatar !== "undefined") {
+					req.session.user.avatar = req.query.avatar;
+					responseData.userModif.avatar = req.query.avatar;
+				}
+			}
+			res.send(responseData);
+		});
+		client.release();
+	});
+});
+
 /*//Loadig js files...
 app.get('/app/controllers/controller.js', function(req, res) {
 	res.sendFile(path.join(__dirname + '/CERIGame/app/controllers/controller.js'));
