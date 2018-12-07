@@ -46,7 +46,7 @@ body {
 }
 
 @keyframes erreur {
-    0% {left: 100%; opacity : 0;}
+    0% {left: 100%; opacity : 0; display: none;}
     25% {left: 0%;  opacity : 1;}
     50% {left: 0%;  opacity : 1;}
     75% {left: 0%;  opacity : 1;}
@@ -100,7 +100,7 @@ body {
 }
 
 @keyframes erreur {
-    0% {left: 100%; opacity : 0;}
+    0% {left: 100%; opacity : 0; display: none;}
     25% {left: 0%;  opacity : 1;}
     50% {left: 0%;  opacity : 1;}
     75% {left: 0%;  opacity : 1;}

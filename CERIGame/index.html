@@ -40,6 +40,11 @@
     			</span>
   			</div>
   		</div>
+
+  		<div class="contener" ng-controller="bandeau_controller">
+  			<div class="row {{message.class}}" id="bandeau-controlled-message">{{message.msg}}</div>
+  		</div>
+
   		<div ng-show="showUser">
 	  		<div class="bandeau user" ng-controller="user_controller">
 	  			<div> 

@@ -1,5 +1,77 @@
 
 function bandeau_controller($scope, session) {
+	$scope.messageTab = [];
+	$scope.message = {
+		msg: null,
+		class: null
+	};
+	$scope.running = false;
+	$scope.secondMessage = false;
+
+	$scope.reset = function(callback) {
+		$scope.message.msg = "";
+		$scope.message.class = "hide";
+		if(typeof callback == "function") {
+			callback();
+		}
+		$scope.$apply();
+	}
+
+	$scope.showMessage = function() {
+		$scope.running = true;
+		// 
+		var message = $scope.messageTab.shift();
+		// console.log("message: ", message);
+		if(message.type == "error") {
+			$scope.message.class = "error";
+		} else if(message.type == "message") {
+			$scope.message.class = "bandeau-notif";
+		}
+		$scope.message.msg = message.msg;
+		if($scope.secondMessage) {
+			$scope.$apply();
+		}
+		
+		console.log("Message affiché: ", $scope.message.msg, $scope.message.class)
+		setTimeout(function() {
+			if($scope.messageTab.length != 0) {
+				$scope.reset();
+				setTimeout(function() {
+					$scope.$apply(function() {
+						$scope.showMessage();
+					});
+				}, 2000)
+			} else {
+				$scope.secondMessage = false;
+				$scope.running = false;
+				$scope.message.msg = "";
+				$scope.message.class = "hide";
+				$scope.$apply();
+			}
+		}, 6500);
+	}
+
+	$scope.$on('getMessage', function(event, data) {
+		console.log("Bandeau message reçu, ", event, data, "message ", data.msg, "type: ", data.type, "messageTab: ", $scope.messageTab, $scope.messageTab.length, "comp ", $scope.messageTab.length > 0);
+		if($scope.messageTab.length > 0) {
+			for(var i=0; i<$scope.messageTab.length; i++) {
+				var message = $scope.messageTab[i];
+				if(message.msg !== data.msg) {
+					$scope.messageTab.push(data);
+				}
+			}
+			if(!$scope.running) {
+				$scope.showMessage();
+			}
+		} else {
+			$scope.messageTab.push(data);
+			if(!$scope.running) {
+				$scope.showMessage();
+			}
+		}
+		// $scope.messageTab.forEach(function(message) {
+		// });
+	});
 }
   
 //-----------Controleu quizz
@@ -318,10 +390,14 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 	}
 
 	$scope.afficheMessage = function(message) {
-		$('#bandeau-message').removeClass("bandeau-notif").removeClass("error");
-		$scope.classBandeau = "bandeau-notif";
+		// $('#bandeau-message').removeClass("bandeau-notif").removeClass("error");
+		// $scope.classBandeau = "bandeau-notif";
 
-		$scope.textBandeau = message;
+		// $scope.textBandeau = message;
+		$rootScope.$broadcast('getMessage', {
+			type: "message",
+			msg: message
+		});
 	}
 
 	$scope.bandeauNom = function(nom) {
@@ -329,10 +405,14 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 	}
 
 	$scope.afficheMessageError = function(message) {
-		$('#bandeau-message').removeClass("bandeau-notif").removeClass("error");
-		$scope.classBandeau = "error";
+		// $('#bandeau-message').removeClass("bandeau-notif").removeClass("error");
+		// $scope.classBandeau = "error";
 
-		$scope.textBandeau = message;
+		// $scope.textBandeau = message;
+		$rootScope.$broadcast('getMessage', {
+			type: "error",
+			msg: message
+		});
 	}
 
 	$scope.affiche;

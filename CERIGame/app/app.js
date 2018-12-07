@@ -1,6 +1,6 @@
 var app = angular.module('main', ["ngRoute"])
-	.controller('bandeau_controller', bandeau_controller)
 	.controller('main_controller', main_controller) 
+	.controller('bandeau_controller', bandeau_controller)
 	.controller('quizz_controller', quizz_controller)
 	.controller('user_controller', user_controller)
 	.service("accessDataService", accessDataService) 
