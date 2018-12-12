@@ -126,7 +126,7 @@ body {
 }
 
 .difficulte{
-	background-color: #004466;
+	/*background-color: #004466;*/
 	border-color: #004466;
 }
 
@@ -159,4 +159,18 @@ body {
 
 .quizz{
 	margin-top: auto;
+}
+
+.image{
+	width:20%;
+	height:auto;
+}
+
+.logo {
+	width:20%;
+	height:auto;
+}
+
+.pointer{
+	cursor:pointer;
 }

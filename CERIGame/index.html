@@ -21,21 +21,22 @@
 		<!--<div class="contener" ng-controller="bandeau_controller">-->
 		<div class="contener" ng-hide="no_logged_in" ng-show="isLoggedIn()">
 			<div class="bandeau row">
-				<span class="colonne_Logo col-4">
-    				<p> Logo </p>
+				<span class="colonne_Logo col-3">
+    				<img class="logo pointer" src="http://www.photonstorm.com/wp-content/uploads/2011/09/step2.gif">
+    			</span>
     			</span>
     			<span class="colonne col-2">
-    				<input type="button" ng-click="loadQuizz()">
+    				<input class="btn btn-primary pointer" type="button" ng-click="loadQuizz()" value="Quizzs">
     			</span>
-    			<span class="colonne col-2" id="bandeau-message">
-    				<p> message </p>
+    			<span class="colonne col-3" id="bandeau-message">
+					<img class="image" src={{user.avatar}}>
     			</span>
     			<span class="colonne col-2" id="bandeau-nom">
-    				<a ng-click="loadUser()" id="user-show"> {{ user.username }} </a>
+    				<a class="pointer" ng-click="loadUser()" id="user-show"> {{ user.username }} </a>
     			</span>
-    			<span class="colonne col-2">
+    			<span class="colonne col-2 ">
     				<form ng-submit="logOut()">
-    					<input class="deconnect btn btn-primary" id="deconnect" type="submit" value="deconnexion">
+    					<input class="deconnect btn btn-primary pointer" id="deconnect" type="submit" value="deconnexion">
 	    			</form>
     			</span>
   			</div>
@@ -75,7 +76,7 @@
 								<input class="form-control" id='avatar' type="texte" placeholder="avatar" name="avatar" ng-model="avatar" value="{{user.avatar}}">
 							</div>
 							<div class="col">
-								<input class="modif-user btn btn-primary" id="modif-user" type="submit" value="Modifier">
+								<input class="modif-user btn btn-primary pointer" id="modif-user" type="submit" value="Modifier">
 							</div>
 						</div>
 					</form>
@@ -106,7 +107,7 @@
 	  					</span>
 	  				</div>
 					<div class="quizz-search">
-			  			<input type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
+			  			<input class="btn btn-primary pointer" type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
 						<!--{{ quizzs }}-->
 					</div>
 					<div class="texte-quizz row list head">
