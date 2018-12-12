@@ -102,6 +102,7 @@ function accueil_controller($scope, accessDataService) {
 		console.log("click event : acceuil");
 		$scope.reloadAcceuil();
 	});
+	$scope.reloadAcceuil();
 }
   
 //-----------Controleu quizz
@@ -269,9 +270,7 @@ function quizz_controller($scope, session, accessDataService) {
 		});
 	}
 
-	$scope.$on('showQuizz', function() {
-		//Initialisation des quizzs
-		console.log("click event : showQuizz");
+	$scope.reset = function() {
 		$scope.quizzs = null;
 		$scope.searchQuizz = true;
 		$scope.questionQuizz = false;
@@ -298,6 +297,38 @@ function quizz_controller($scope, session, accessDataService) {
 		$scope.nbH = 0;
 		$scope.nbM = 0;
 		$scope.nbS = 0;
+	}
+
+	$scope.$on('showQuizz', function() {
+		//Initialisation des quizzs
+		console.log("click event : showQuizz");
+		$scope.reset();
+		/*$scope.quizzs = null;
+		$scope.searchQuizz = true;
+		$scope.questionQuizz = false;
+		$scope.showEnd = false;
+
+
+		$scope.selectedQuizz = null;
+		$scope.question = null;
+		$scope.questionAffiche = null;
+
+		$scope.debut = null;
+		$scope.nbBonneReponse = 0;
+
+		$scope.nbQuestion = 5;
+
+		$scope.score = 0;
+
+		$scope.numQuestion = -1;
+
+		$scope.tempS = 0;
+
+		$scope.difficulte = "facile";
+		$scope.chronoStop = false;
+		$scope.nbH = 0;
+		$scope.nbM = 0;
+		$scope.nbS = 0;*/
 	});
 }
 
@@ -432,6 +463,9 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 		$scope.showUser = !$scope.showUser;
 		$scope.showQuizz = false;
 		$scope.showAcceuil = false;
+		if($scope.showUser == false && $scope.showQuizz == false) {
+			$scope.loadAcceuil();
+		}
 		console.log("emission event")
 		$rootScope.$broadcast('recupUser');
 	}
@@ -440,11 +474,14 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 		$scope.showQuizz = !$scope.showQuizz;
 		$scope.showUser = false;
 		$scope.showAcceuil = false;
+		if($scope.showQuizz == false && $scope.showUser == false) {
+			$scope.loadAcceuil();
+		}
 		$rootScope.$broadcast('showQuizz');
 	}
 
 	$scope.loadAcceuil = function() {
-		$scope.showAcceuil = !$scope.showAcceuil;
+		$scope.showAcceuil = true;
 		$scope.showQuizz = false;
 		$scope.showUser = false;
 		$rootScope.$broadcast('showAcceuil');
@@ -491,12 +528,14 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 				$scope.no_logged_in = false;
 				$scope.afficheMessage(data.statusMsg);
 				$scope.bandeauNom(data.username);
+				$scope.loadAcceuil();
 			}
 		});
 	};
 
 	$scope.logOut = function() {
 		console.log('logOut')
+		$scope.showAcceuil = false;
 		$scope.user = null;
 		$scope.no_logged_in = true;
 		$scope.showUser=false;

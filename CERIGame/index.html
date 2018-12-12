@@ -143,7 +143,7 @@
 			  			<input class="btn btn-primary pointer" type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
 						<!--{{ quizzs }}-->
 					</div>
-					<div class="texte-quizz row list head">
+					<div class="texte-quizz row list head" ng-show="quizzs">
 						<span class="colonne col-6 quizz-name">
 							Thème
 						</span>
@@ -156,7 +156,6 @@
 
 						<div class="quizz-infos" ng-click="playQuizz(quizz, 'facile')">
 							<span class="texte-quizz colonne col-6 quizz-name">
-
 								{{ quizz['thème'] }}
 							</span>
 							<span class="texte-quizz colonne col-6 quizz-redacteur">
@@ -194,6 +193,9 @@
 							{{ score }}
 						</span>
 					</div>
+					<div ng-click="reset()">
+						Rejouer
+					</div>
 				</div>
 			</div>
 		</div>
@@ -210,9 +212,59 @@
 		 -->
 		 <div ng-show="showAcceuil">
 		 		<div class="bandeau quizz" ng-controller="accueil_controller">
-		 			{{tot10Sum}}
 		 			<div class="Top10Best">
-		 				
+		 				<div class="Top-10-best-title">
+		 					Les 10 meuilleurs scores
+		 				</div>
+		 				<div class="Top-10-label">
+		 					<span class="user-logo">
+		 						Avatar
+		 					</span>
+		 					<span class="user-identifiant">
+		 						identifiant
+		 					</span>
+		 					<span class="user_score">
+		 						Meilleur score
+		 					</span>
+		 				</div>
+		 				<div class="listUser" ng-repeat="user in tot10Best">
+		 					<span class="user-logo">
+		 						<img class="logo pointer" src={{user.avatar}}>
+		 					</span>
+		 					<span class="user-identifiant">
+		 						{{user.identifiant}}
+		 					</span>
+		 					<span class="user_score">
+		 						{{user.score}}
+		 					</span>
+		 				</div>
+		 			</div>
+		 			<div class="Top-10-sum">
+		 				<div class="Top-10-best-title">
+		 					Les 10 meuilleurs scores cumulés
+		 				</div>
+		 				<div class="Top-10-label">
+		 					<span class="user-logo">
+		 						Avatar
+		 					</span>
+		 					<span class="user-identifiant">
+		 						identifiant
+		 					</span>
+		 					<span class="user_score">
+		 						somme_score
+		 					</span>
+		 				</div>
+		 				<div class="listUser" ng-repeat="user in tot10Sum">
+		 					<span class="user-logo">
+		 						<img class="logo pointer" src={{user.avatar}}>
+		 					</span>
+		 					<span class="user-identifiant">
+		 						{{user.identifiant}}
+		 					</span>
+		 					<span class="user_score">
+		 						{{user.somme_score}}
+		 					</span>
+		 				</div>
 		 			</div>
 		 		</div>
 		 </div>

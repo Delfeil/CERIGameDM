@@ -170,7 +170,7 @@ app.get('/quizzList', function(req, res) {
 
 app.get('/historique', function(req, res) {
 	if(typeof req.session.user !== 'undefined') {
-		var sql= "select * from fredouil.historique where id_users='" + req.session.user.id + "';";
+		var sql= "select * from fredouil.historique where id_users='" + req.session.user.id + "'  order by date DESC;";
 		pool.connect(function(err, client, done) {
 			if(err) {
 				console.log('Error connecting to pg server' + err.stack);
