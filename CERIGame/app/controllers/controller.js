@@ -313,10 +313,32 @@ function user_controller($scope, session, accessDataService) {
 	$scope.avatar = null;
 
 	$scope.modifResult = "";
+	
+	$scope.getsumScore = function() {
+		if (typeof $scope.user !== "undefined" && $scope.user !== null)
+		{
+			accessDataService.getInfo('/sumScore?idUser=' + $scope.user._id, function(data) {
+				console.log("result: getBest", data)
+				$scope.sumScore = data.sumScore;
+			});
+		}
+	}
+	
+	$scope.getBest = function() {
+		if (typeof $scope.user !== "undefined" && $scope.user !== null)
+		{
+			accessDataService.getInfo('/bestScore?idUser=' + $scope.user._id, function(data) {
+				console.log("result: getBest", data)
+				$scope.bestScores = data.bestScores;
+			});
+		}
+	}
 
 	$scope.getUser = function() {
 		console.log("Recup user");
 		$scope.user = session.getUser();
+		$scope.getsumScore();
+		$scope.getBest();
 	}
 	$scope.getUser();
 
@@ -325,19 +347,9 @@ function user_controller($scope, session, accessDataService) {
 		$scope.getUser();
 	});
 
-	$scope.getBest = function() {
-		accessDataService.getInfo('/bestScore?idUser=' + $scope.user._id, function(data) {
-			console.log("result: getBest", data)
-			$scope.bestScores = data.bestScores;
-		});
-	}
+	
 
-	$scope.sumScore = function() {
-		accessDataService.getInfo('/sumScore?idUser=' + $scope.user._id, function(data) {
-			console.log("result: getBest", data)
-			$scope.sumScore = data.sumScore;
-		});
-	}
+	
 
 	$scope.modifUser = function() {
 		console.log("modif user")

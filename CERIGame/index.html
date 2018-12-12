@@ -48,6 +48,9 @@
   		<div ng-show="showUser">
 	  		<div class="bandeau user" ng-controller="user_controller">
 	  			<div> 
+	  				 Avatar: <img ng-src="{{user.avatar}}">
+	  			</div>
+				<div> 
 	  				Pseudo : {{user.username}}
 	  			</div>
 	  			<div>
@@ -56,9 +59,40 @@
 	  			<div>
 	  				Prenom : {{user.firstName}}
 	  			</div>
+				<div>
+					Meilleurs Scores : 
+					<div class="row list head">
+						<span class="colonne col-2">
+							Date
+						</span>
+						<span class="colonne col-2">
+							Score
+						</span>
+						<span class="colonne col-8">
+							Nombre de réponse
+						</span>
+					</div>
+					<div class="meileurScore-list" ng-repeat="score in bestScores">
+
+						<div class="Score-infos">
+							<span class="colonne col-5">
+								{{ score['date'] }}
+							</span>
+							<span class="colonne col-5">
+								{{ score['score'] }}
+							</span>
+							<span class="colonne col-2">
+								{{ score['nbreponse'] }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<div>
+					Score total : {{sumScore}}
+				</div>
 	  			<!-- Test controleur requetes -->
 	  			<!-- <div ng-click="getBest()">Les meilleurs scores</div> -->
-	  			<!-- <div ng-click="sumScore()">Le score total</div> -->
+	  			<!-- <div ng-click="getsumScore()">Le score total</div> -->
 	  			<div class="form-modif">
 		  			<form class= "form-modif-user" name="modif-user-form" ng-submit="modifUser()">
 				  		<div class="form-row">

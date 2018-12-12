@@ -162,15 +162,16 @@ body {
 }
 
 .image{
-	width:20%;
+	width:15%;
 	height:auto;
 }
 
 .logo {
-	width:20%;
+	width:15%;
 	height:auto;
 }
 
 .pointer{
 	cursor:pointer;
 }
+
