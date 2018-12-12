@@ -73,6 +73,36 @@ function bandeau_controller($scope, session) {
 		// });
 	});
 }
+
+//------------Controleur page d'acceuil
+function accueil_controller($scope, accessDataService) {
+	$scope.tot10Best = null;
+	$scope.top10Sum = null;
+
+	$scope.reloadAcceuil = function() {
+		$scope.getTop10Sum();
+		$scope.getTop10Best();
+	}
+
+	$scope.getTop10Best = function() {
+		accessDataService.getInfo('/top10_best', function(data) {
+			console.log("result: getBest", data)
+			$scope.tot10Best = data.topBest;
+		});
+	}
+
+	$scope.getTop10Sum = function() {
+		accessDataService.getInfo('/top10_tot', function(data) {
+			console.log("result: getBest", data)
+			$scope.tot10Sum = data.topSum;
+		});
+	}
+
+	$scope.$on('showAcceuil', function() {
+		console.log("click event : acceuil");
+		$scope.reloadAcceuil();
+	});
+}
   
 //-----------Controleu quizz
 function quizz_controller($scope, session, accessDataService) {
@@ -138,6 +168,8 @@ function quizz_controller($scope, session, accessDataService) {
 		}
 	}*/
 
+	$scope.first = true;
+
 	$scope.chrono = function() {
 		console.log("chrono: ")
 		var beginTime = $scope.debut;
@@ -154,13 +186,18 @@ function quizz_controller($scope, session, accessDataService) {
 			$scope.nbH = heures;
 			$scope.nbM = trueMinutes;
 			$scope.nbS = trueSecondes;
-			setTimeout($scope.chrono, 1000);
+			if($scope.first = false) {
+				$scope.$apply();
+			}
+			$scope.first = false;
+			setTimeout($scope.chrono, 2000);
 		}
 	}
 
 	$scope.playQuizz = function(quizz) {
 		$scope.searchQuizz = false;
 		$scope.questionQuizz = true;
+		$scope.first = true;
 		$scope.nbH = 0;
 		$scope.nbM = 0;
 		$scope.nbS = 0;
@@ -377,16 +414,28 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 	$scope.textBandeau = null;
 
 	$scope.showUser = false;
+	$scope.showAcceuil = false;
 
 	$scope.loadUser= function(){
 		$scope.showUser = !$scope.showUser;
+		$scope.showQuizz = false;
+		$scope.showAcceuil = false;
 		console.log("emission event")
 		$rootScope.$broadcast('recupUser');
 	}
 
 	$scope.loadQuizz = function() {
 		$scope.showQuizz = !$scope.showQuizz;
+		$scope.showUser = false;
+		$scope.showAcceuil = false;
 		$rootScope.$broadcast('showQuizz');
+	}
+
+	$scope.loadAcceuil = function() {
+		$scope.showAcceuil = !$scope.showAcceuil;
+		$scope.showQuizz = false;
+		$scope.showUser = false;
+		$rootScope.$broadcast('showAcceuil');
 	}
 
 	$scope.afficheMessage = function(message) {
@@ -461,6 +510,7 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 	}
 
 	if ($scope.isLoggedIn()) {
+		$scope.loadAcceuil();
 		$scope.no_logged_in = false;
 	}
 }

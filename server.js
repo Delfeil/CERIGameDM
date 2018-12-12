@@ -226,6 +226,8 @@ app.get('/saveScore', function(req, res) {
 });
 
 app.get('/top10_best', function(req, res) {
+	//Page donnant les meilleurs scores
+
 	var sql= "select DISTINCT(id_users), score, date, temps, nbreponse, identifiant, nom, prenom, avatar from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id order by score DESC FETCH FIRST 10  ROWS ONLY;";
 	pool.connect(function(err, client, done) {
 		if(err) {
@@ -249,6 +251,8 @@ app.get('/top10_best', function(req, res) {
 });
 
 app.get('/top10_tot', function(req, res) {
+	//Page donnant les meilleurs scores cumulés
+
 	// var sql= "select SUM(score) as somme_score, id_users from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id group by id_users order by somme_score DESC FETCH FIRST 10 ROWS ONLY;";
 	var sql= "select SUM(score) as somme_score, id_users, identifiant, avatar from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id group by id_users, identifiant, avatar order by somme_score DESC FETCH FIRST 10 ROWS ONLY;";
 	pool.connect(function(err, client, done) {
