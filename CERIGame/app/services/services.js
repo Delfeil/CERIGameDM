@@ -55,7 +55,7 @@ function AuthService($http, session) {
 		session.setInfo('last_connect', last_connexion);
 		console.log("last_connexion: ", last_connexion.last_connect)
 		return $http
-			.get('/logout?last_connect=' + last_connexion.last_connect)
+			.get('/logout?last_connect=' + last_connexion.last_connect + '&user=' + user.username)
 			.then(function(response) {
 				return(response.data);
 			});
@@ -90,7 +90,7 @@ function sessionService($log, $window, accessDataService) {
 
 // Service webSocket
 function treatSocket($rootScope) {
-	var socket = io.connect('http://pedago02a.univ-avignon.fr:3120/');
+	var socket = io.connect('http://pedago02a.univ-avignon.fr:3101/');
 	return {
 		on: function(eventName, callback){
 			socket.on(eventName, callback);

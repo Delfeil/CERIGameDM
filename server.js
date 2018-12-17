@@ -45,7 +45,7 @@ var pool = new pgClient.Pool({
 /******** Configuration du serveur NodeJS - Port : 3xxx
 *
 ********/
-var server=app.listen(3120, function() {
+var server=app.listen(3101, function() {
 	console.log('listening on 3101');
 });
 
@@ -56,15 +56,9 @@ var io = require('socket.io').listen(server); // définit le middleware socket.i
 
 io.on('connection', function (socket) { // ouverture de la connexion full-duplex disponible dans le paramètre socket
 	console.log('connexion socket.oi');
-	socket.emit('notification', { hello: 'world' });
 	socket.on("notification client", function (data) {
 		console.log(data);
 	});
-});
-
-app.get('/exemple', (request, response) => {
-	// le serveur envoie le notification au client
-	io.emit('notification', 'socket.io => Information par quartier ok');
 });
 
 /******** Gestion des URI
@@ -177,6 +171,34 @@ app.get('/quizzList', function(req, res) {
 		if(mongoClient) {
 			var reqDB = {};
 			mongoClient.db().collection('quizz').find(reqDB).toArray(function(err, data) {
+				if(err) return console.log('erreur base de données');
+				if(data) {
+					console.log('requete ok ');
+					mongoClient.close();
+					res.send(data);
+				}
+			});
+		}
+	});
+});
+
+app.get('/quizzTheme', function(req, res) {
+	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
+		if(err) {
+			return console.log("erreur connexion base de données");
+		}
+		if(mongoClient) {
+			var themeOnly = {
+				_id: 0,
+				fournisseur: 0,
+				quizz: 0,
+				rédacteur: 0,
+				thème: 1
+			};
+			var reqDB = {
+				thème: { $exists: true }
+			};
+			mongoClient.db().collection('quizz').find({}, themeOnly).toArray(function(err, data) {
 				if(err) return console.log('erreur base de données');
 				if(data) {
 					console.log('requete ok ');

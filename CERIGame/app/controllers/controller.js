@@ -108,6 +108,7 @@ function accueil_controller($scope, accessDataService) {
 //-----------Controleu quizz
 function quizz_controller($scope, session, accessDataService) {
 	$scope.quizzs = null;
+	$scope.themes = [];
 	$scope.searchQuizz = true;
 	$scope.questionQuizz = false;
 	$scope.showEnd = false;
@@ -148,6 +149,16 @@ function quizz_controller($scope, session, accessDataService) {
 			});
 		} else {
 			$scope.quizzs = session.getInfo('all_quizz');
+		}
+	}
+
+	$scope.getThemes = function() {
+		if(session.getInfo('quizzThemes') == null) {
+			accessDataService.getInfo('/quizzTheme', function(data) {
+				console.log("result: ", data)
+				$scope.quizzs = data;
+				session.setInfo('all_quizz', data);
+			});
 		}
 	}
 
@@ -297,6 +308,7 @@ function quizz_controller($scope, session, accessDataService) {
 		$scope.nbH = 0;
 		$scope.nbM = 0;
 		$scope.nbS = 0;
+		$scope.getThemes();
 	}
 
 	$scope.$on('showQuizz', function() {
@@ -526,7 +538,7 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 				$scope.afficheMessageError(data.statusMsg);
 			} else {
 				$scope.no_logged_in = false;
-				$scope.afficheMessage(data.statusMsg);
+				// $scope.afficheMessage(data.statusMsg);
 				$scope.bandeauNom(data.username);
 				$scope.loadAcceuil();
 			}
@@ -569,7 +581,7 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 		console.log('Controleur-socket.on =>'+data);
 		$scope.afficheMessage('Message du serveur ' + data);
 	});
-	
+
 	socket.on("notification_connexion", function(data) {
 		console.log('Controleur-socket.on => '+data);
 		$scope.afficheMessage(data);
