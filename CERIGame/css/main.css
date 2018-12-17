@@ -161,17 +161,25 @@ body {
 	margin-top: auto;
 }
 
-.image{
-	width:15%;
+.image_bandeau{
+	width:4em;
 	height:auto;
 }
 
 .logo {
-	width:15%;
+	width:3em;
 	height:auto;
 }
 
 .pointer{
 	cursor:pointer;
+}
+
+.image_avatar{
+    border: solid;
+    border-radius: 1em;
+    border-color: #4da6ff;
+    width:6em;
+    height:auto;
 }
 
