@@ -28,7 +28,7 @@
     				<input class="btn btn-primary pointer" type="button" ng-click="loadQuizz()" value="Quizzs">
     			</span>
     			<span class="colonne col-3" id="bandeau-message">
-					<img class="image" src={{user.avatar}}>
+					<img class="image_bandeau" src={{user.avatar}}>
     			</span>
     			<span class="colonne col-2" id="bandeau-nom">
     				<a class="pointer" ng-click="loadUser()" id="user-show"> {{ user.username }} </a>
@@ -48,7 +48,7 @@
   		<div ng-show="showUser">
 	  		<div class="bandeau user" ng-controller="user_controller">
 	  			<div> 
-	  				 Avatar: <img ng-src="{{user.avatar}}">
+	  				 Avatar: <img class="image_avatar" ng-src="{{user.avatar}}">
 	  			</div>
 				<div> 
 	  				Pseudo : {{user.username}}
@@ -62,13 +62,13 @@
 				<div>
 					Meilleurs Scores : 
 					<div class="row list head">
-						<span class="colonne col-2">
+						<span class="colonne col-8">
 							Date
 						</span>
 						<span class="colonne col-2">
 							Score
 						</span>
-						<span class="colonne col-8">
+						<span class="colonne col-2">
 							Nombre de réponse
 						</span>
 					</div>
@@ -229,7 +229,7 @@
 		 				</div>
 		 				<div class="listUser" ng-repeat="user in tot10Best">
 		 					<span class="user-logo">
-		 						<img class="logo pointer" src={{user.avatar}}>
+		 						<img class="image_avatar pointer" src={{user.avatar}}>
 		 					</span>
 		 					<span class="user-identifiant">
 		 						{{user.identifiant}}
@@ -256,7 +256,7 @@
 		 				</div>
 		 				<div class="listUser" ng-repeat="user in tot10Sum">
 		 					<span class="user-logo">
-		 						<img class="logo pointer" src={{user.avatar}}>
+		 						<img class="image_avatar pointer" src={{user.avatar}}>
 		 					</span>
 		 					<span class="user-identifiant">
 		 						{{user.identifiant}}
