@@ -444,7 +444,7 @@ function user_controller($scope, session, accessDataService) {
 }
 
 //------------Controleur principal
-function main_controller($scope, auth, session, accessDataService, $rootScope) {
+function main_controller($scope, auth, session, accessDataService, $rootScope, socket) {
 	$scope.user = null;
 	$scope.username = null;
 	$scope.password = null;
@@ -564,5 +564,20 @@ function main_controller($scope, auth, session, accessDataService, $rootScope) {
 		$scope.loadAcceuil();
 		$scope.no_logged_in = false;
 	}
+
+	socket.on("notification", function(data) {
+		console.log('Controleur-socket.on =>'+data);
+		$scope.afficheMessage('Message du serveur ' + data);
+	});
+	
+	socket.on("notification_connexion", function(data) {
+		console.log('Controleur-socket.on => '+data);
+		$scope.afficheMessage(data);
+	});
+
+	socket.on("notification_erreur", function(data) {
+		console.log('Controleur-socket.on =>'+data);
+		$scope.afficheMessageError("Message d'erreur du serveur " + data);
+	});
 }
 

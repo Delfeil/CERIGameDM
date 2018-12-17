@@ -45,8 +45,26 @@ var pool = new pgClient.Pool({
 /******** Configuration du serveur NodeJS - Port : 3xxx
 *
 ********/
-var server=app.listen(3101, function() {
+var server=app.listen(3120, function() {
 	console.log('listening on 3101');
+});
+
+/*******
+*	Configuration du webSocket
+*******/
+var io = require('socket.io').listen(server); // définit le middleware socket.io et le serveur avec lequel la connexion full-duplex doit être établie
+
+io.on('connection', function (socket) { // ouverture de la connexion full-duplex disponible dans le paramètre socket
+	console.log('connexion socket.oi');
+	socket.emit('notification', { hello: 'world' });
+	socket.on("notification client", function (data) {
+		console.log(data);
+	});
+});
+
+app.get('/exemple', (request, response) => {
+	// le serveur envoie le notification au client
+	io.emit('notification', 'socket.io => Information par quartier ok');
 });
 
 /******** Gestion des URI
@@ -113,9 +131,11 @@ app.get('/login', function(req, res) {
 				responseData.firstName = result.rows[0].prenom;
 				responseData.statusMsg='Connexion réussie : bonjour ' + result.rows[0].prenom;
 				responseData.avatar= result.rows[0].avatar;
+				io.emit('notification_connexion', req.query.login +  " vient de se connecter.");
 			} else {
 				console.log('Connexion échouée : informations de connexion incorrecte');
 				responseData.statusMsg='Connexion échouée : informations de connexion incorrecte';
+				//io.emit('notification_erreur', 'Erreur de Connexion');
 			}
 			res.send(responseData);
 		});

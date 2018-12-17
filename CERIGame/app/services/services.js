@@ -87,3 +87,16 @@ function sessionService($log, $window, accessDataService) {
 		window.localStorage.clear();
 	}
 }
+
+// Service webSocket
+function treatSocket($rootScope) {
+	var socket = io.connect('http://pedago02a.univ-avignon.fr:3120/');
+	return {
+		on: function(eventName, callback){
+			socket.on(eventName, callback);
+		},
+		emit: function(eventName, data) {
+			socket.emit(eventName, data);
+		}
+	};
+}

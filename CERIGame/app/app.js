@@ -7,6 +7,7 @@ var app = angular.module('main', ["ngRoute"])
 	.service("accessDataService", accessDataService) 
 	.service('session', sessionService)
 	.service('auth', AuthService)
+	.factory('socket', treatSocket)
 	/* .config(function($routeProvider) {
 		$routeProvider.when("/", {controller: "quizz_controller", templateUrl: "/quizz"})
 			.otherwise({redirectTo: "/"});
