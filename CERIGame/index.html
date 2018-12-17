@@ -48,44 +48,49 @@
   		</div>
 
   		<div ng-show="showUser">
-	  		<div class="bandeau user" ng-controller="user_controller">
-	  			<div> 
-	  				 Avatar: <img class="image_avatar" ng-src="{{user.avatar}}">
-	  			</div>
-				<div> 
-	  				Pseudo : {{user.username}}
-	  			</div>
-	  			<div>
-	  				Nom : {{user.name}}
-	  			</div>
-	  			<div>
-	  				Prenom : {{user.firstName}}
+	  		<div class="texte-user bandeau user" ng-controller="user_controller">
+	  			<div class="row">
+		  			<div class="colonne col-6"> 
+		  				<img class="image_avatar" ng-src="{{user.avatar}}">
+		  			</div>
+					<div class="colonne col-6" > 
+						<span class="row">
+			  				Pseudo : {{user.username}}
+			  			</span>
+			  			<span class="row">
+			  				Nom : {{user.name}}
+			  			</span>
+			  			<span class="row">
+			  				Prenom : {{user.firstName}}
+			  			</span>
+		  			</div>
 	  			</div>
 				<div>
 					Meilleurs Scores : 
 					<div class="row list head">
-						<span class="colonne col-8">
+						<span class="texte-user titre colonne col-5">
 							Date
 						</span>
-						<span class="colonne col-2">
+						<span class="texte-user titre colonne col-5">
 							Score
 						</span>
-						<span class="colonne col-2">
+						<span class="texte-user titre colonne col-2">
 							Nombre de réponse
 						</span>
 					</div>
-					<div class="meileurScore-list" ng-repeat="score in bestScores">
-
-						<div class="Score-infos">
-							<span class="colonne col-5">
-								{{ score['date'] }}
-							</span>
-							<span class="colonne col-5">
-								{{ score['score'] }}
-							</span>
-							<span class="colonne col-2">
-								{{ score['nbreponse'] }}
-							</span>
+					<div class= "quizz-tableau" >
+						<div class="meileurScore-list" ng-repeat="score in bestScores">
+							<div class="Score-infos row">
+								<span class="texte-user colonne col-5">
+									{{ score['date'] }}
+								</span>
+								<span class="texte-user colonne col-5">
+									{{ score['score'] }}
+								</span>
+								<span class="texte-user colonne col-2">
+									{{ score['nbreponse'] }}
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -145,7 +150,7 @@
 			  			<input class="btn btn-primary pointer" type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
 						<!--{{ quizzs }}-->
 					</div>
-					<div class="texte-quizz row list head" ng-show="quizzs">
+					<div class="texte-quizz titre row list head" ng-show="quizzs">
 						<span class="colonne col-6 quizz-name">
 							Thème
 						</span>
@@ -153,16 +158,20 @@
 							Rédacteur
 						</span>
 					</div>
-					<div class="quizz-list" ng-repeat="quizz in quizzs">
-						<!--C'est le quizz: {{ quizz }}-->
+					<div ng-show="quizzs">
+						<div class= "quizz-tableau " >
+							<div class="quizz-list" ng-repeat="quizz in quizzs">
+								<!--C'est le quizz: {{ quizz }}-->
 
-						<div class="quizz-infos" ng-click="playQuizz(quizz, 'facile')">
-							<span class="texte-quizz colonne col-6 quizz-name">
-								{{ quizz['thème'] }}
-							</span>
-							<span class="texte-quizz colonne col-6 quizz-redacteur">
-								{{ quizz['rédacteur'] }}
-							</span>
+								<div class="quizz-infos row" ng-click="playQuizz(quizz, 'facile')">
+									<div class="texte-quizz colonne col-6 quizz-name">
+										{{ quizz['thème'] }}
+									</div>
+									<div class="texte-quizz colonne col-6 quizz-redacteur">
+										{{ quizz['rédacteur'] }}
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

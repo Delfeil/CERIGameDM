@@ -45,7 +45,7 @@ var pool = new pgClient.Pool({
 /******** Configuration du serveur NodeJS - Port : 3xxx
 *
 ********/
-var server=app.listen(3120, function() {
+var server=app.listen(3101, function() {
 	console.log('listening on 3101');
 });
 
