@@ -19,6 +19,7 @@ body {
     -webkit-transform: translateY(-50%) translateX(-50%);
     transform: translateY(-50%) translateX(-50%);
     max-width: 330px;
+    min-width: 330px;
     padding: 15px;
     background-color: rgba(255, 150, 150, 0.5);
     border: solid;
@@ -52,6 +53,7 @@ body {
     color:white;
     padding: 5px;
     width: 97%;
+    /*min-width: 97%;*/
 	margin-left: auto;
   	margin-right: auto;
     animation-name: erreur;
@@ -94,6 +96,7 @@ body {
 	background-color: rgba(128, 191, 255, 0.5);
 	padding: 5px;
 	width: 97%;
+    min-width: 580px;
 	margin-left: auto;
   	margin-right: auto;
 }
@@ -106,6 +109,7 @@ body {
     background-color: rgba(128, 191, 255, 0.5);
     padding: 5px;
     width: 97%;
+    min-width: 580px;
 	margin-left: auto;
   	margin-right: auto;
     animation-name: erreur;
