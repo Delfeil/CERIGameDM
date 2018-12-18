@@ -189,16 +189,12 @@ app.get('/quizzTheme', function(req, res) {
 		}
 		if(mongoClient) {
 			var themeOnly = {
-				_id: 0,
-				fournisseur: 0,
-				quizz: 0,
-				rédacteur: 0,
-				thème: 1
+				'thème': 1
 			};
 			var reqDB = {
 				thème: { $exists: true }
 			};
-			mongoClient.db().collection('quizz').find({}, themeOnly).toArray(function(err, data) {
+			mongoClient.db().collection('quizz').find({}).project({'thème':1}).toArray(function(err, data) {
 				if(err) return console.log('erreur base de données');
 				if(data) {
 					console.log('requete ok ');

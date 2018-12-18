@@ -155,9 +155,9 @@ function quizz_controller($scope, session, accessDataService) {
 	$scope.getThemes = function() {
 		if(session.getInfo('quizzThemes') == null) {
 			accessDataService.getInfo('/quizzTheme', function(data) {
-				console.log("result: ", data)
-				$scope.quizzs = data;
-				session.setInfo('all_quizz', data);
+				console.log("recup Themes: ", data)
+				$scope.themes = data;
+				session.setInfo('quizzThemes', data);
 			});
 		}
 	}
