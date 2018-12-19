@@ -38,7 +38,7 @@ var pool = new pgClient.Pool({
 	host: '127.0.0.1',
 	database: 'etd',
 	password: 'M6rozk',
-	port: 5432 
+	port: 5432
 });
 
 
@@ -307,6 +307,37 @@ app.get('/top10_tot', function(req, res) {
 			} else if (result.rows[0] != null) {
 				console.log("requete réussie: " + JSON.stringify(result));
 				responseData.topSum = result.rows;
+			}
+			res.send(responseData);
+		});
+		client.release();
+	});
+});
+
+app.get('/getOtherUser', function(req, res) {
+	var sql = "select * from fredouil.users where id= " + req.query.userId + ";";
+	console.log("Requete: ----------> " + sql)
+	pool.connect(function(err, client, done) {
+		if(err) {
+			console.log('Error connecting to pg server' + err.stack);
+		} else {
+			console.log('Connection established with pg db server');
+		}
+		client.query(sql, function(err, result){
+			var responseData = {};
+			console.log("result: scoreTotal ", result)
+			if(err) {
+				console.log('Erreur d’exécution de la requete' + err.stack);
+			} else if (result.rows[0] != null) {
+				console.log("requete réussie: " + JSON.stringify(result));
+				responseData.user = {
+					_id: 	result.rows[0].id,
+					username: result.rows[0].identifiant,
+					name: result.rows[0].nom,
+					firstName: result.rows[0].prenom,
+					avatar: result.rows[0].avatar,
+					statut: result.rows[0].statut
+				};
 			}
 			res.send(responseData);
 		});

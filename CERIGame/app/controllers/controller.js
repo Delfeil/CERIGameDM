@@ -19,7 +19,7 @@ function bandeau_controller($scope, session) {
 
 	$scope.showMessage = function() {
 		$scope.running = true;
-		// 
+		//
 		var message = $scope.messageTab.shift();
 		// console.log("message: ", message);
 		if(message.type == "error") {
@@ -31,7 +31,7 @@ function bandeau_controller($scope, session) {
 		if($scope.secondMessage) {
 			$scope.$apply();
 		}
-		
+
 		console.log("Message affiché: ", $scope.message.msg, $scope.message.class)
 		setTimeout(function() {
 			if($scope.messageTab.length != 0) {
@@ -104,7 +104,7 @@ function accueil_controller($scope, accessDataService) {
 	});
 	$scope.reloadAcceuil();
 }
-  
+
 //-----------Controleu quizz
 function quizz_controller($scope, session, accessDataService) {
 	$scope.quizzs = null;
@@ -240,7 +240,7 @@ function quizz_controller($scope, session, accessDataService) {
 				case 'facile' :
 					nbAffiche = 2;
 					break;
-				case 'normal' : 
+				case 'normal' :
 					nbAffiche = 3;
 					break;
 				case 'difficile' :
@@ -345,7 +345,7 @@ function quizz_controller($scope, session, accessDataService) {
 }
 
 //---------Controlleur view users
-function user_controller($scope, session, accessDataService) {
+function user_controller($scope, session, accessDataService, $rootScope) {
 	$scope.user = null;
 	$scope.bestScores = null;
 	$scope.sumScore = null;
@@ -356,7 +356,9 @@ function user_controller($scope, session, accessDataService) {
 	$scope.avatar = null;
 
 	$scope.modifResult = "";
-	
+
+	$scope.showModif = true;
+
 	$scope.getsumScore = function() {
 		if (typeof $scope.user !== "undefined" && $scope.user !== null)
 		{
@@ -366,7 +368,7 @@ function user_controller($scope, session, accessDataService) {
 			});
 		}
 	}
-	
+
 	$scope.getBest = function() {
 		if (typeof $scope.user !== "undefined" && $scope.user !== null)
 		{
@@ -379,22 +381,42 @@ function user_controller($scope, session, accessDataService) {
 
 	$scope.getUser = function() {
 		console.log("Recup user");
+		$scope.showModif = true;
 		$scope.user = session.getUser();
 		$scope.getsumScore();
 		$scope.getBest();
 	}
-	$scope.getUser();
+	// $scope.getUser();
+
+	$scope.getOtherUser = function(id) {
+		$scope.showModif = false;
+		accessDataService.getInfo('/getOtherUser?userId=' + id, function(data) {
+			console.log("result: RecupOtheruser :", data)
+			$scope.user = data.user;
+			$scope.getsumScore();
+			$scope.getBest();
+		});
+	}
 
 	$scope.$on('recupUser', function() {
 		console.log("click event :");
 		$scope.getUser();
 	});
 
-	
+	$scope.$on('recupOtherUser', function(event, data) {
+		console.log("event recupOtherUser: ", data);
+		$scope.getOtherUser(data.id);
+	});
 
-	
+
 
 	$scope.modifUser = function() {
+		var CurUser = session.getUser();
+		if($scope.user._id != CurUser._id) {
+			console.log("Action non autorisée");
+			$rootScope.$broadcast('unAutorised');
+			return;
+		}
 		console.log("modif user")
 		var url = "/updateUser?";
 		var precedent = false;
@@ -446,13 +468,10 @@ function user_controller($scope, session, accessDataService) {
 				}
 				session.setUser($scope.user);
 				console.log("session modifiée: ", session.getUser());
+				$rootScope.$broadcast('userModified');
 			}
 		});
 	}
-
-	// $('#user-show').on('click', function() {
-	// 	$scope.getUser();
-	// });
 }
 
 //------------Controleur principal
@@ -480,6 +499,16 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 		}
 		console.log("emission event")
 		$rootScope.$broadcast('recupUser');
+	}
+
+	$scope.loadOtherUser = function(id) {
+		$scope.showUser = true;
+		$scope.showQuizz = false;
+		$scope.showAcceuil = false;
+		console.log("emission event show otherUser")
+		$rootScope.$broadcast('recupOtherUser', {
+			id: id
+		});
 	}
 
 	$scope.loadQuizz = function() {
@@ -558,7 +587,7 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 	$scope.notLoggedIn = function() {
 		var logged = !auth.isLoggedIn();
 		return logged;
-	}	
+	}
 
 	$scope.isLoggedIn = function() {
 		var logged = auth.isLoggedIn();
@@ -577,6 +606,9 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 		$scope.no_logged_in = false;
 	}
 
+	/**
+	*	Gestion de la réception webSocket
+	*/
 	socket.on("notification", function(data) {
 		console.log('Controleur-socket.on =>'+data);
 		$scope.afficheMessage('Message du serveur ' + data);
@@ -590,6 +622,17 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 	socket.on("notification_erreur", function(data) {
 		console.log('Controleur-socket.on =>'+data);
 		$scope.afficheMessageError("Message d'erreur du serveur " + data);
+	});
+
+	/**
+	*	Gestion des évenements reçus par Le controleur
+	*/
+	$scope.$on("userModified", function() {
+		$scope.user = session.getUser();
+	});
+
+	$scope.$on("unAutorised", function() {
+		$scope.afficheMessageError("Action non autorisée");
 	});
 }
 

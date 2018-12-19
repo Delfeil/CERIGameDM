@@ -9,7 +9,6 @@ function accessDataService($http){
 		return $http
 		.get(url)
 		.then(function(response) { //First function handles success
-				console.log("response: ", response.data)
 				callback(response.data);
 				// return(response.data);
 			},

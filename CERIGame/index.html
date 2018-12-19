@@ -14,7 +14,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-		
+
 		<script src="app/controllers/controller.js"></script>
 		<script src="app/services/services.js"></script>
 		<script src="app/app.js"></script>
@@ -52,10 +52,10 @@
   		<div ng-show="showUser">
 	  		<div class="texte-user bandeau user" ng-controller="user_controller">
 	  			<div class="row">
-		  			<div class="colonne col-6"> 
+		  			<div class="colonne col-6">
 		  				<img class="image_avatar" ng-src="{{user.avatar}}">
 		  			</div>
-					<div class="colonne col-6" > 
+					<div class="colonne col-6" >
 						<span class="row">
 			  				Pseudo : {{user.username}}
 			  			</span>
@@ -68,7 +68,7 @@
 		  			</div>
 	  			</div>
 				<div>
-					Meilleurs Scores : 
+					Meilleurs Scores :
 					<div class="row list head">
 						<span class="texte-user titre colonne col-5">
 							Date
@@ -102,19 +102,19 @@
 	  			<!-- Test controleur requetes -->
 	  			<!-- <div ng-click="getBest()">Les meilleurs scores</div> -->
 	  			<!-- <div ng-click="getsumScore()">Le score total</div> -->
-	  			<div class="form-modif">
+	  			<div class="form-modif" ng-show="showModif">
 		  			<form class= "form-modif-user" name="modif-user-form" ng-submit="modifUser()">
 				  		<div class="form-row">
-				    		<div class="col">	
+				    		<div class="col">
 								<input class="form-control" id='identifiant' type="texte" placeholder="identifiant" name="identifiant" ng-model="identifiant" value="{{user.username}}">
 							</div>
-							<div class="col">	
+							<div class="col">
 								<input class="form-control" id='nom' type="texte" placeholder="nom" name="nom" ng-model="nom" value="{{user.name}}">
 							</div>
-							<div class="col">	
+							<div class="col">
 								<input class="form-control" id='prenom' type="texte" placeholder="prenom" name="prenom" ng-model="prenom" value="{{user.firstName}}">
 							</div>
-							<div class="col">	
+							<div class="col">
 								<input class="form-control" id='avatar' type="texte" placeholder="avatar" name="avatar" ng-model="avatar" value="{{user.avatar}}">
 							</div>
 							<div class="col">
@@ -125,10 +125,10 @@
 				</div>
 	  		</div>
 	  	</div>
-	  	
+
 	  	<!--
 	  		-------------------------------
-	  		Partie quizzs 
+	  		Partie quizzs
 	  		-------------------------------
 	  	 -->
   		<div ng-show="showQuizz">
@@ -206,7 +206,7 @@
 				<div ng-show="showEnd">
 					<div class="resultat">
 						<span>
-							score : 
+							score :
 						</span>
 						<span>
 							{{ score }}
@@ -218,13 +218,13 @@
 				</div>
 			</div>
 		</div>
-		<!-- 
+		<!--
 			-------------------------------
 			Fin partie quizzs
 			-------------------------------
 		 -->
 
-		 <!-- 
+		 <!--
 			-------------------------------
 			partie Acceuil
 			-------------------------------
@@ -246,7 +246,7 @@
 		 						Meilleur score
 		 					</span>
 		 				</div>
-		 				<div class="listUser" ng-repeat="user in tot10Best">
+		 				<div class="listUser" ng-repeat="user in tot10Best" ng-click="loadOtherUser(user.id_users)">
 		 					<span class="user-logo">
 		 						<img class="image_avatar pointer" src={{user.avatar}}>
 		 					</span>
@@ -273,7 +273,7 @@
 		 						somme_score
 		 					</span>
 		 				</div>
-		 				<div class="listUser" ng-repeat="user in tot10Sum">
+		 				<div class="listUser" ng-repeat="user in tot10Sum" ng-click="loadOtherUser(user.id_users)">
 		 					<span class="user-logo">
 		 						<img class="image_avatar pointer" src={{user.avatar}}>
 		 					</span>
@@ -287,7 +287,7 @@
 		 			</div>
 		 		</div>
 		 </div>
-		 <!-- 
+		 <!--
 			-------------------------------
 			Fin partie Acceuil
 			-------------------------------
@@ -301,10 +301,10 @@
 			<p class="text-center" id="message-connect">Veuillez-vous identifier</p>
 
 			<div class="form-row">
-	    		<div class="col">	
+	    		<div class="col">
 					<input class="form-control" id='login' type="texte" placeholder="Login" name="login" ng-model="username">
 				</div>
-				<div class="col">	
+				<div class="col">
 					<input class="form-control" id='password' type="password" placeholder="mdp" name="mdp" ng-model="password">
 				</div>
 				<div class="col">
