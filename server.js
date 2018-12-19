@@ -182,6 +182,29 @@ app.get('/quizzList', function(req, res) {
 	});
 });
 
+app.get('/getDefis', function(req, res) {
+	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
+		if(err) {
+			return console.log("erreur connexion base de données");
+		}
+		if(mongoClient) {
+			var reqDB = {
+				// userDefie: req.session.user.id
+				'userDefiee': 103
+			};
+			console.log("User: ", reqDB)
+			mongoClient.db().collection('defi').find(reqDB).toArray(function(err, data) {
+				if(err) return console.log('erreur base de données');
+				if(data) {
+					console.log('Defis reçus : ', data);
+					mongoClient.close();
+					res.send(data);
+				}
+			});
+		}
+	});
+});
+
 app.get('/quizzTheme', function(req, res) {
 	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
 		if(err) {
