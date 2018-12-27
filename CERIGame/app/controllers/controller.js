@@ -113,6 +113,10 @@ function quizz_controller($scope, session, accessDataService) {
 	$scope.questionQuizz = false;
 	$scope.showEnd = false;
 
+	$scope.defis = null;
+	$scope.showDefis = false;
+	$scope.usersDefiant = null;
+	$scope.defiCase = false;
 
 	$scope.selectedQuizz = null;
 	$scope.question = null;
@@ -141,6 +145,7 @@ function quizz_controller($scope, session, accessDataService) {
 	}
 
 	$scope.getQuizzes = function() {
+		$scope.showDefis = false;
 		if(session.getInfo('all_quizz') == null) {
 			accessDataService.getInfo('/quizzList', function(data) {
 				console.log("result: ", data)
@@ -152,6 +157,54 @@ function quizz_controller($scope, session, accessDataService) {
 		}
 	}
 
+	$scope.recupUsersInfo = function(userId, callback) {
+		if(typeof $scope.usersDefiant.userId == "undefined") {
+			accessDataService.getInfo('/getOtherUser?userId=' + userId, function(dataUser) {
+				console.log("resultOtherUser: ", dataUser.user)
+				$scope.usersDefiant.userId = dataUser.user;
+				// $scope.defis[i]['infoUser'] = {};
+				// $scope.defis[i]['infoUser'] = dataUser.user;
+				if(typeof callback == "function") {
+					callback($scope.usersDefiant.userId);
+				}
+			});
+		}
+	}
+
+	$scope.getDefis = function() {
+		var $$scope = $scope;
+		accessDataService.getInfo('/getDefis', function(data) {
+			console.log("result: ", data)
+			$scope.defis = data;
+			$scope.showDefis = true;
+			$scope.quizzs = null;
+			/*$scope.usersDefiant = {};
+			for(var i=0; i<$scope.defis.length; i++) {
+				var userId = $scope.defis[i].userDefiant;
+				$scope.recupUsersInfo(userId, function(userInfo) {
+					console.log("userInfo: ", userInfo);
+					$$scope.defis[i].infoUser = userInfo;
+					console.log("User info get: ", $scope.defis, "user defiant: ", $scope.usersDefiant);
+				});
+
+				// gérer la récup de + d'infos depuis le serveur nodeJs
+
+
+				/*if(typeof $scope.usersDefiant.userId == "undefined") {
+					accessDataService.getInfo('/getOtherUser?userId=' + userId, function(dataUser) {
+						console.log("resultOtherUser: ", dataUser.user)
+						$scope.usersDefiant.userId = dataUser.user;
+						// $scope.defis[i]['infoUser'] = {};
+						// $scope.defis[i]['infoUser'] = dataUser.user;
+					});
+				} else {
+				}
+				$scope.defis[i].infoUser = $scope.usersDefiant.userId;
+			}*/
+
+		});
+	}
+
 	$scope.getThemes = function() {
 		if(session.getInfo('quizzThemes') == null) {
 			accessDataService.getInfo('/quizzTheme', function(data) {
@@ -161,24 +214,6 @@ function quizz_controller($scope, session, accessDataService) {
 			});
 		}
 	}
-
-	/*$scope.chrono = function() {
-		console.log("chrono: ")
-		var beginTime = $scope.debut;
-		while(!$scope.chronoStop) {
-			var curTime = Date.now();
-			var timeSpend = curTime - beginTime;
-			var secondes = timeSpend/1000;
-			var minutes = secondes/60;
-			var trueSecondes = Math.round(secondes%60);
-			var heures = Math.round(minutes/60);
-			var trueMinutes = Math.round(minutes%60);
-			$scope.nbH = heures;
-			$scope.nbM = trueMinutes;
-			$scope.nbS = trueSecondes;
-			sleep(1000);
-		}
-	}*/
 
 	$scope.first = true;
 
@@ -207,6 +242,11 @@ function quizz_controller($scope, session, accessDataService) {
 	}
 
 	$scope.playQuizz = function(quizz) {
+		if(typeof quizz.userDefiant !== "undefined") {
+			$scope.defiCase = true;
+		} else {
+			$scope.defiCase = false;
+		}
 		$scope.searchQuizz = false;
 		$scope.questionQuizz = true;
 		$scope.first = true;
@@ -287,6 +327,10 @@ function quizz_controller($scope, session, accessDataService) {
 		$scope.questionQuizz = false;
 		$scope.showEnd = false;
 
+		$scope.defis = null;
+		$scope.showDefis = false;
+		$scope.usersDefiant = null;
+		$scope.defiCase = false;
 
 		$scope.selectedQuizz = null;
 		$scope.question = null;

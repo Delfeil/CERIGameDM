@@ -183,22 +183,68 @@ app.get('/quizzList', function(req, res) {
 });
 
 app.get('/getDefis', function(req, res) {
+	// gérer la récup de + d'infos depuis le serveur nodeJs
 	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
 		if(err) {
 			return console.log("erreur connexion base de données");
 		}
 		if(mongoClient) {
 			var reqDB = {
-				// userDefie: req.session.user.id
+				// 'userDefiee': req.session.user.id
 				'userDefiee': 103
 			};
 			console.log("User: ", reqDB)
 			mongoClient.db().collection('defi').find(reqDB).toArray(function(err, data) {
 				if(err) return console.log('erreur base de données');
 				if(data) {
-					console.log('Defis reçus : ', data);
+					var responseData = data;
+					console.log('Defis reçus : ', responseData[0]);
+					/*for(var i=0; i<responseData.length; i++) {
+						var x = i;
+						var defi = responseData[x];
+						var sql = "select * from fredouil.users where id= " + defi.userDefiant + ";";
+						pool.connect(function(err, client, done) {
+							if(err) {
+								console.log('Error connecting to pg server' + err.stack);
+							} else {
+								console.log('Connection established with pg db server');
+							}
+							client.query(sql, function(err, result){
+								console.log("result: scoreTotal ", result)
+								if(err) {
+									console.log('Erreur d’exécution de la requete' + err.stack);
+								} else if (result.rows[0] != null) {
+									console.log("requete réussie: " + JSON.stringify(result), responseData[x]);
+									responseData[x].infoUserDefiant = {
+										_id: 	result.rows[0].id,
+										username: result.rows[0].identifiant,
+										name: result.rows[0].nom,
+										firstName: result.rows[0].prenom,
+										avatar: result.rows[0].avatar,
+										statut: result.rows[0].statut
+									};
+									// responseData[x].infoUserDefiant.username = result.rows[0].identifiant;
+									// responseData[x].infoUserDefiant.avatar = result.rows[0].avatar;
+									// responseData[x].infoUserDefiant.statut = result.rows[0].statut;
+
+									// responseData.user = {
+									// 	_id: 	result.rows[0].id,
+									// 	username: result.rows[0].identifiant,
+									// 	name: result.rows[0].nom,
+									// 	firstName: result.rows[0].prenom,
+									// 	avatar: result.rows[0].avatar,
+									// 	statut: result.rows[0].statut
+									// };
+								}
+								if(x == responseData.length) {
+									res.send(responseData);
+								}
+							});
+							client.release();
+						});
+					}*/
 					mongoClient.close();
-					res.send(data);
+					res.send(responseData);
 				}
 			});
 		}
