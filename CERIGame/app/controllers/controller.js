@@ -386,12 +386,23 @@ function quizz_controller($scope, session, accessDataService) {
 	$scope.recupUserDefier = function() {
 		accessDataService.getInfo('/getAllUsers', function(data) {
 			$scope.showUserDefier = true;
-			$scope.usersDefier = data.users;
+			$scope.usersDefier = data.users.rows;
+			console.log("recul all users", $scope.usersDefier);	
 		});
+	}
+
+	$scope.defier = function(id, quizz) {
+		// var curUser = session.getUser();
+		// accessDataService.getInfo('/defier?userId="'+id+'"', function(data) {
+		// 	$scope.showUserDefier = true;
+		// 	$scope.usersDefier = data.users.rows;
+		// 	console.log("recul all users", $scope.usersDefier);	
+		// });
 	}
 
 	$scope.endQuizz = function() {
 		$scope.showUserDefier = false;
+		$scope.showDefier = false;
 		$scope.chronoStop = true;
 		console.log("fin: ", $scope.debut);
 		var endTime = Date.now();
@@ -399,7 +410,7 @@ function quizz_controller($scope, session, accessDataService) {
 		$scope.score = Math.round(($scope.nbBonneReponse*1398.2)/$scope.tempS);
 		accessDataService.getInfo('/saveScore?idQuizz=' + $scope.selectedQuizz._id + "&score=" + $scope.score + "&nbReponse=" + $scope.nbBonneReponse + "&tempS=" + $scope.tempS, function(data) {
 			console.log("result: ", data)
-			if(typeof $scope.selectedQuizz.userDefiant !== "undefined") {
+			if(typeof $scope.selectedQuizz.userDefiant === "undefined") {
 				$scope.showDefier = true;
 			}
 		});

@@ -266,6 +266,24 @@
 					<div ng-click="reset()">
 						Rejouer
 					</div>
+					<div ng-show="showDefier" ng-click="recupUserDefier()">
+						Défier un joueur
+					</div>
+					<div class="allUsers" ng-show="showUserDefier">
+						<div class="row">
+							<div class="col-3">
+							  	
+							</div>
+						</div>
+						<div class="row" ng-repeat="user in usersDefier" ng-click="defier(user.id, quizz)">
+							<span class="user-logo">
+		 						<img class="image_avatar pointer" src={{user.avatar}}>
+		 					</span>
+		 					<span class="user-identifiant">
+		 						{{user.identifiant}}
+		 					</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
