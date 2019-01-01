@@ -190,8 +190,8 @@ app.get('/getDefis', function(req, res) {
 		}
 		if(mongoClient) {
 			var reqDB = {
-				// 'userDefiee': req.session.user.id
-				'userDefiee': 103
+				'userDefiee': req.session.user.id
+				// 'userDefiee': 103
 			};
 			console.log("User: ", reqDB)
 			mongoClient.db().collection('defi').find(reqDB).toArray(function(err, data) {
@@ -272,6 +272,29 @@ app.get('/quizzTheme', function(req, res) {
 				}
 			});
 		}
+	});
+});
+
+app.get('/getAllUsers', function(req, res) {
+	var sql="select * from fredouil.users where id!="+req.session.user.id+";";
+	pool.connect(function(err, client, done) {
+		if(err) {
+			console.log('Error connecting to pg server' + err.stack);
+		} else {
+			console.log('Connection established with pg db server');
+		}
+		client.query(sql, function(err, result){
+			var responseData = {};
+			console.log("result: scoreTotal ", result)
+			if(err) {
+				console.log('Erreur d’exécution de la requete' + err.stack);
+			} else if (result.rows[0] != null) {
+				console.log("requete réussie: " + JSON.stringify(result));
+				responseData.users = result;
+			}
+			res.send(responseData);
+		});
+		client.release();
 	});
 });
 

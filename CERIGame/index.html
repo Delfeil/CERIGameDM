@@ -134,34 +134,14 @@
   		<div ng-show="showQuizz">
 	  		<div class="bandeau quizz" ng-controller="quizz_controller">
 	  			<div ng-show="searchQuizz">
-	  				<div class="select-difficilte selection">
-	  					<span class="difficulte ">
-	  						<input class="btn btn-primary" type="button" ng-click="setDifficulte('facile')" value="Facile">
-							<!--Facile-->
-	  					</span>
-	  					<span class="difficulte ">
-							<input class="btn btn-primary" type="button" ng-click="setDifficulte('normal')" value="Normale">
-	  						<!--Normal-->
-	  					</span>
-	  					<span class="difficulte ">
-							<input class="btn btn-primary" type="button" ng-click="setDifficulte('difficile')" value="Difficile">
-	  						<!--Difficile-->
-	  					</span>
-	  				</div>
 	  				<div class="theme-select">
 	  					<select id="theme-select">
 	  						<option value="">Sélectionez un thème</option>
 	  						<option ng-repeat="option in themes" value="{{option._id}}">{{option['thème']}}</option>
 	  					</select>
 	  				</div>
-	  				<div class="nb-question-select">
-							<label>
-								Nombre de questions:
-							</label>
-							<input type="number" name="nbQuestion" min="1" max="30" ng-model="nbQuestion">
-	  				</div>
 					<div class="quizz-search">
-			  			<input class="btn btn-primary pointer" type="button" ng-click="getQuizzes()" value="Afficher tous les quizzs">
+			  			<input class="btn btn-primary pointer" type="button" ng-click="getQuizzes()" value="Faire un quizz">
 						<!--{{ quizzs }}-->
 					</div>
 					<div class="defis-search">
@@ -200,25 +180,54 @@
 							</div>
 						</div>
 					</div>
-					<div class="texte-quizz titre row list head" ng-show="quizzs">
-						<span class="colonne col-6 quizz-name">
-							Thème
-						</span>
-						<span class="colonne col-6 quizz-redacteur">
-							Rédacteur
-						</span>
-					</div>
 					<div ng-show="quizzs">
-						<div class="quizz-tableau" >
-							<div class="quizz-list" ng-repeat="quizz in quizzs">
-								<!--C'est le quizz: {{ quizz }}-->
-
-								<div class="quizz-infos row" ng-click="playQuizz(quizz, 'facile')">
+						<div class="select-difficilte selection">
+		  					<span class="difficulte ">
+		  						<input class="btn btn-primary" type="button" ng-click="setDifficulte('facile')" value="Facile">
+								<!--Facile-->
+		  					</span>
+		  					<span class="difficulte ">
+								<input class="btn btn-primary" type="button" ng-click="setDifficulte('normal')" value="Normale">
+		  						<!--Normal-->
+		  					</span>
+		  					<span class="difficulte ">
+								<input class="btn btn-primary" type="button" ng-click="setDifficulte('difficile')" value="Difficile">
+		  						<!--Difficile-->
+		  					</span>
+		  				</div>
+						<div class="nb-question-select">
+							<label>
+								Nombre de questions:
+							</label>
+							<input type="number" name="nbQuestion" min="1" max="30" ng-model="nbQuestion">
+	  					</div>
+						<div class="texte-quizz titre row list head" ng-show="quizzs">
+							<span class="colonne col-6 quizz-name">
+								Thème
+							</span>
+							<span class="colonne col-6 quizz-redacteur">
+								Rédacteur
+							</span>
+						</div>
+						<div ng-show="quizzs">
+							<div class="quizz-tableau" >
+								<div class="quizz-infos row" ng-click="randomQuizz()">
 									<div class="texte-quizz colonne col-6 quizz-name">
-										{{ quizz['thème'] }}
+										Aléatoire
 									</div>
 									<div class="texte-quizz colonne col-6 quizz-redacteur">
-										{{ quizz['rédacteur'] }}
+										Delfeil Casanova
+									</div>
+								</div>
+								<div class="quizz-list" ng-repeat="quizz in quizzs">
+
+									<div class="quizz-infos row" ng-click="randomQuizz(quizz, 'facile')">
+										<div class="texte-quizz colonne col-6 quizz-name">
+											{{ quizz['thème'] }}
+										</div>
+										<div class="texte-quizz colonne col-6 quizz-redacteur">
+											{{ quizz['rédacteur'] }}
+										</div>
 									</div>
 								</div>
 							</div>

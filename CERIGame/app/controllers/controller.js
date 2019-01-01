@@ -19,7 +19,6 @@ function bandeau_controller($scope, session) {
 
 	$scope.showMessage = function() {
 		$scope.running = true;
-		//
 		var message = $scope.messageTab.shift();
 		// console.log("message: ", message);
 		if(message.type == "error") {
@@ -117,6 +116,9 @@ function quizz_controller($scope, session, accessDataService) {
 	$scope.showDefis = false;
 	$scope.usersDefiant = null;
 	$scope.defiCase = false;
+	$scope.showDefier = false;
+	$scope.showUserDefier = false;
+	$scope.usersDefier = null;
 
 	$scope.selectedQuizz = null;
 	$scope.question = null;
@@ -172,7 +174,6 @@ function quizz_controller($scope, session, accessDataService) {
 	}
 
 	$scope.getDefis = function() {
-		var $$scope = $scope;
 		accessDataService.getInfo('/getDefis', function(data) {
 			console.log("result: ", data)
 			$scope.defis = data;
@@ -218,7 +219,6 @@ function quizz_controller($scope, session, accessDataService) {
 	$scope.first = true;
 
 	$scope.chrono = function() {
-		console.log("chrono: ")
 		var beginTime = $scope.debut;
 		if($scope.chronoStop) {
 			console.log("chrono finis")
@@ -241,7 +241,80 @@ function quizz_controller($scope, session, accessDataService) {
 		}
 	}
 
+	$scope.randomQuizz = function(quizz) {
+		var randomizedQuizz = [];
+		if(typeof $scope.nbQuestion == "undefined" || $scope.nbQuestion >30) {
+			$scope.nbQuestion = 30;
+		} else if($scope.nbQuestion<=0) {
+			$scope.nbQuestion = 5;
+		}
+		var nbAffiche =0;
+		switch($scope.difficulte) {
+			case 'facile' :
+				nbAffiche = 2;
+				break;
+			case 'normal' :
+				nbAffiche = 3;
+				break;
+			case 'difficile' :
+				nbAffiche = -1;
+				break;
+		}
+		console.log("randomize: original", quizz, $scope.nbQuestion, nbAffiche)
+		if(typeof quizz === "undefined") {
+			var quizz={
+				thème: "aléatoire",
+				fournisseur: "CeriGame 3101"
+			}
+			for(var i=0; i<$scope.nbQuestion; i++) {
+				var questions = $scope.quizzs[Math.floor(Math.random()*$scope.quizzs.length)].quizz;
+				randomizedQuizz.push(questions[Math.floor(Math.random()*questions.length)]);
+				if(nbAffiche!=-1) {
+					var nbToHide = randomizedQuizz[i].propositions.length - nbAffiche;
+					var numReponse = randomizedQuizz[i].propositions.indexOf(randomizedQuizz[i]['réponse']);
+					while(nbToHide>0) {
+						var numToHide = numReponse;
+						while(numToHide == numReponse) {
+							numToHide = Math.floor(Math.random()*randomizedQuizz[i].propositions.length);
+						}
+						randomizedQuizz[i].propositions.splice(numToHide, 1);
+						var numReponse = randomizedQuizz[i].propositions.indexOf(randomizedQuizz[i]['réponse']);
+						nbToHide--;
+					}
+				}
+			}
+			quizz.quizz = randomizedQuizz;
+		} else {
+			var alreadyPlaced = [];
+			for(var i=0; i<$scope.nbQuestion; i++) {
+				var numToPlace = Math.floor(Math.random()*quizz.quizz.length);
+				while(alreadyPlaced.indexOf(numToPlace) != -1) {
+					var numToPlace = Math.floor(Math.random()*quizz.quizz.length);
+				}
+				alreadyPlaced.push(numToPlace);
+				randomizedQuizz.push(quizz.quizz[numToPlace]);
+				if(nbAffiche!=-1) {
+					var nbToHide = randomizedQuizz[i].propositions.length - nbAffiche;
+					var numReponse = randomizedQuizz[i].propositions.indexOf(randomizedQuizz[i]['réponse'])
+					while(nbToHide>0) {
+						var numToHide = numReponse;
+						while(numToHide == numReponse) {
+							numToHide = Math.floor(Math.random()*randomizedQuizz[i].propositions.length);
+						}
+						randomizedQuizz[i].propositions.splice(numToHide, 1);
+						var numReponse = randomizedQuizz[i].propositions.indexOf(randomizedQuizz[i]['réponse']);
+						nbToHide--;
+					}
+				}
+			}
+			quizz.quizz=randomizedQuizz;
+		}
+		console.log("randomized: ", quizz)
+		$scope.playQuizz(quizz);
+	}
+
 	$scope.playQuizz = function(quizz) {
+		console.log("PlayQuizz: ", quizz, $scope.nbQuestion)
 		if(typeof quizz.userDefiant !== "undefined") {
 			$scope.defiCase = true;
 		} else {
@@ -287,8 +360,8 @@ function quizz_controller($scope, session, accessDataService) {
 					nbAffiche = $scope.question.propositions.length;
 					break;
 			}
-			if(nbAffiche == $scope.question.propositions.length) {
-				$scope.questionAffiche = $scope.question.propositions;
+			$scope.questionAffiche = $scope.question.propositions;
+			/*if(nbAffiche == $scope.question.propositions.length) {
 			} else {
 				$scope.questionAffiche = [];
 				var reponsePlace = false;
@@ -306,11 +379,19 @@ function quizz_controller($scope, session, accessDataService) {
 						nbAffiche--;
 					}
 				}
-			}
+			}*/
 		}
 	}
 
+	$scope.recupUserDefier = function() {
+		accessDataService.getInfo('/getAllUsers', function(data) {
+			$scope.showUserDefier = true;
+			$scope.usersDefier = data.users;
+		});
+	}
+
 	$scope.endQuizz = function() {
+		$scope.showUserDefier = false;
 		$scope.chronoStop = true;
 		console.log("fin: ", $scope.debut);
 		var endTime = Date.now();
@@ -318,6 +399,9 @@ function quizz_controller($scope, session, accessDataService) {
 		$scope.score = Math.round(($scope.nbBonneReponse*1398.2)/$scope.tempS);
 		accessDataService.getInfo('/saveScore?idQuizz=' + $scope.selectedQuizz._id + "&score=" + $scope.score + "&nbReponse=" + $scope.nbBonneReponse + "&tempS=" + $scope.tempS, function(data) {
 			console.log("result: ", data)
+			if(typeof $scope.selectedQuizz.userDefiant !== "undefined") {
+				$scope.showDefier = true;
+			}
 		});
 	}
 
@@ -331,6 +415,9 @@ function quizz_controller($scope, session, accessDataService) {
 		$scope.showDefis = false;
 		$scope.usersDefiant = null;
 		$scope.defiCase = false;
+		$scope.showDefier = false;
+		$scope.showUserDefier = false;
+		$scope.usersDefier = null;
 
 		$scope.selectedQuizz = null;
 		$scope.question = null;

@@ -189,6 +189,10 @@ body {
 	margin-top: auto;
 }
 
+.quizz-infos{
+    cursor: pointer;
+}
+
 .image_bandeau{
 	width:4em;
 	height:auto;
