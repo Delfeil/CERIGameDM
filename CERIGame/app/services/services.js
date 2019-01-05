@@ -17,6 +17,19 @@ function accessDataService($http){
 				return("Something went wrong");
 		});
 	}
+
+	this.postInfo = function(url, data, callback) {
+		return $http
+		.post(url, data)
+		.then(function(response) { //First function handles success
+				callback(response.data);
+				// return(response.data);
+			},
+			function(response) {
+				//Second function handles error
+				return("Something went wrong");
+		});
+	}
 }
 
 // Service d'authentification

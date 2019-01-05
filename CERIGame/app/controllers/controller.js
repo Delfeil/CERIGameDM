@@ -344,7 +344,13 @@ function quizz_controller($scope, session, accessDataService) {
 		$scope.numQuestion = $scope.numQuestion + 1;
 		if($scope.numQuestion >= $scope.selectedQuizz.quizz.length || $scope.numQuestion == ($scope.nbQuestion - 1)) {
 			$scope.questionQuizz = false;
+			$scope.showDefier = false;
+			$scope.showUserDefier = false;
 			$scope.showEnd = true;
+			console.log("$scope.selectedQuizz: ", $scope.selectedQuizz, "défi?: ", $scope.selectedQuizz.userDefiant, "type: ", typeof $scope.selectedQuizz.userDefiant)
+			if(typeof $scope.selectedQuizz.userDefiant === "undefined") {
+				$scope.showDefier = true;
+			}
 			$scope.endQuizz();
 		} else {
 			$scope.question = $scope.selectedQuizz.quizz[$scope.numQuestion];
@@ -391,28 +397,21 @@ function quizz_controller($scope, session, accessDataService) {
 		});
 	}
 
-	$scope.defier = function(id, quizz) {
-		// var curUser = session.getUser();
-		// accessDataService.getInfo('/defier?userId="'+id+'"', function(data) {
-		// 	$scope.showUserDefier = true;
-		// 	$scope.usersDefier = data.users.rows;
-		// 	console.log("recul all users", $scope.usersDefier);	
-		// });
+	$scope.defier = function(id) {
+		console.log("user to defie: ", id, "curQuizz: ", $scope.selectedQuizz);
+		var curUser = session.getUser();
+		accessDataService.postInfo('/defier?userId='+id + "&score=" + $scope.score, $scope.selectedQuizz, function(data) {
+		});
 	}
 
 	$scope.endQuizz = function() {
-		$scope.showUserDefier = false;
-		$scope.showDefier = false;
 		$scope.chronoStop = true;
 		console.log("fin: ", $scope.debut);
 		var endTime = Date.now();
 		$scope.tempS = Math.floor((endTime - $scope.debut)/1000);
 		$scope.score = Math.round(($scope.nbBonneReponse*1398.2)/$scope.tempS);
-		accessDataService.getInfo('/saveScore?idQuizz=' + $scope.selectedQuizz._id + "&score=" + $scope.score + "&nbReponse=" + $scope.nbBonneReponse + "&tempS=" + $scope.tempS, function(data) {
+		accessDataService.getInfo("/saveScore?score=" + $scope.score + "&nbReponse=" + $scope.nbBonneReponse + "&tempS=" + $scope.tempS, function(data) {
 			console.log("result: ", data)
-			if(typeof $scope.selectedQuizz.userDefiant === "undefined") {
-				$scope.showDefier = true;
-			}
 		});
 	}
 

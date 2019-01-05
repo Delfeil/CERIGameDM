@@ -8,6 +8,7 @@ const session = require('express-session');	//Gestion des sessions
 const MongoDBStore = require('connect-mongodb-session')(session);	//MongoDB for session
 const MongoClient = require('mongodb').MongoClient; //MongoDB for other
 const path = require('path');
+const bodyParser = require('body-parser');
 
 /******** Declaration des variables
 *
@@ -40,6 +41,8 @@ var pool = new pgClient.Pool({
 	password: 'M6rozk',
 	port: 5432
 });
+
+app.use(bodyParser.json());
 
 
 /******** Configuration du serveur NodeJS - Port : 3xxx
@@ -298,6 +301,19 @@ app.get('/getAllUsers', function(req, res) {
 	});
 });
 
+app.post('/defier', function(req, res) {
+	console.log("données: req.session.userId: ", req.session.userId, "data: ", req, "body?: ", req.body);
+	if(typeof req.session.user !== 'undefined') {
+		if(typeof req.body.quizz === "undefined") {
+			res.send({message: "erreur d'argments"});
+			return;
+		}
+		var quizz = req.body.quizz;
+		var score = req.query.score;
+		var userToDefie = req.query.userId;
+	}
+});
+
 app.get('/historique', function(req, res) {
 	if(typeof req.session.user !== 'undefined') {
 		var sql= "select * from fredouil.historique where id_users='" + req.session.user.id + "'  order by date DESC;";
@@ -330,7 +346,7 @@ app.get('/historique', function(req, res) {
 app.get('/saveScore', function(req, res) {
 	console.log("save score")
 	var score = req.query.score;
-	var idQuizz = req.query.idQuizz;
+	// var idQuizz = req.query.idQuizz;
 	var nbBonneReponse = req.query.nbReponse;
 	var tempS = req.query.tempS;
 	var sql= "insert into fredouil.historique ( id_users, date, nbreponse, temps, score) values ('" + req.session.user.id + "', LOCALTIMESTAMP, '" + nbBonneReponse + "', '" + tempS + "', '" + score + "');";
