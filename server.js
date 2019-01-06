@@ -193,8 +193,7 @@ app.get('/getDefis', function(req, res) {
 		}
 		if(mongoClient) {
 			var reqDB = {
-				'userDefiee': req.session.user.id
-				// 'userDefiee': 103
+				'id_user_defie': ""+req.session.user.id
 			};
 			console.log("User: ", reqDB)
 			mongoClient.db().collection('defi').find(reqDB).toArray(function(err, data) {
@@ -302,15 +301,49 @@ app.get('/getAllUsers', function(req, res) {
 });
 
 app.post('/defier', function(req, res) {
-	console.log("données: req.session.userId: ", req.session.userId, "data: ", req, "body?: ", req.body);
+	console.log("Ajout défi: ", req.session.userId, " <- ", req.body);
 	if(typeof req.session.user !== 'undefined') {
 		if(typeof req.body.quizz === "undefined") {
-			res.send({message: "erreur d'argments"});
+			res.send({message: "erreur d'argments", error: true});
 			return;
 		}
 		var quizz = req.body.quizz;
 		var score = req.query.score;
 		var userToDefie = req.query.userId;
+		var userDefiant = req.session.user;
+		var defi = {
+			quizz: req.body.quizz,
+			id_user_defie: req.query.userId,
+			score_user_defiant: req.query.score,
+			id_user_defiant: req.session.user.id,
+			nom_user_defiant: req.session.user.username,	//je met le username à la place du nom
+			avatar_user_defiant: req.session.user.avatar,
+			name_user_defiant: req.session.user.name 		
+		}
+		MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
+			if(err) {
+				return console.log("erreur connexion base de données");
+			}
+			if(mongoClient) {
+				mongoClient.db().collection('defi').insertOne(defi, function(err, resMongo) {
+					if(err) {
+						res.send({message: "erreur ", error: true});
+						return;
+					}
+					console.log("Défi ajouté ", resMongo);
+					var notif = {
+						message: req.session.user.username + ' vous défi',
+						id_user_defie: userToDefie
+					}
+					io.emit('reception_defi', notif);
+					mongoClient.close();
+					res.send({
+						message: "Défi envoyé",
+						error: false
+					});
+				});
+			}
+		});
 	}
 });
 

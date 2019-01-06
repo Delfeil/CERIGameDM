@@ -105,7 +105,7 @@ function accueil_controller($scope, accessDataService) {
 }
 
 //-----------Controleu quizz
-function quizz_controller($scope, session, accessDataService) {
+function quizz_controller($scope, session, accessDataService, $rootScope) {
 	$scope.quizzs = null;
 	$scope.themes = [];
 	$scope.searchQuizz = true;
@@ -401,6 +401,13 @@ function quizz_controller($scope, session, accessDataService) {
 		console.log("user to defie: ", id, "curQuizz: ", $scope.selectedQuizz);
 		var curUser = session.getUser();
 		accessDataService.postInfo('/defier?userId='+id + "&score=" + $scope.score, $scope.selectedQuizz, function(data) {
+			if(data.error === false) {
+				$rootScope.$broadcast('getMessage', {
+					type: "message",
+					msg: data.message
+				});
+				$scope.reset();
+			}
 		});
 	}
 
@@ -765,6 +772,12 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 		$scope.afficheMessageError("Message d'erreur du serveur " + data);
 	});
 
+	socket.on("reception_defi", function(data) {
+		console.log('Controleur-socket.on =>', data, "user: ", $scope.user);
+		if($scope.user !== null && $scope.user._id == data.id_user_defie) {
+			$scope.afficheMessage(data.message);
+		}
+	});
 	/**
 	*	Gestion des évenements reçus par Le controleur
 	*/
@@ -775,5 +788,6 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 	$scope.$on("unAutorised", function() {
 		$scope.afficheMessageError("Action non autorisée");
 	});
+
 }
 
