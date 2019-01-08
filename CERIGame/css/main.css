@@ -42,6 +42,10 @@ body {
     color:white;
 }
 
+.position{
+	margin-top: 5px;
+}
+
 .error {
     animation-duration: 5s;
     animation-iteration-count: 1;
