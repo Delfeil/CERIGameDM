@@ -74,6 +74,19 @@ body {
     100% {display: none; left: 100%;  opacity : 0; visibility : hidden;}
 }
 
+.error-no-anim {
+    background-color: rgba(255, 150, 150, 0.5);
+    border: solid;
+    border-color: red;
+    border-radius: 1em;
+    color:white;
+    padding: 5px;
+    width: 97%;
+    /*min-width: 97%;*/
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .form-control:focus {
     outline:none !important;
     box-shadow:0 0 0 .2rem rgba(255, 0, 0, 1);
@@ -169,6 +182,7 @@ body {
 .texte-quizz{
 	color:white;
 	font-weight: bold;
+    margin-top: 5px;
 }
 
 .texte-user{
@@ -215,7 +229,7 @@ body {
     border: solid;
     border-radius: 1em;
     border-color: #4da6ff;
-    width:6em;
+    width:4em;
     height:auto;
 }
 
@@ -227,6 +241,12 @@ body {
     width: 97%;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-top: 12px;
+    padding-bottom: 10px;
 }
 
-
+.quizz-select {
+    margin-bottom: 5px;
+}

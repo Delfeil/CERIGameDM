@@ -21,7 +21,7 @@
 
 		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	</head>
-	<body ng-controller="main_controller">
+	<body ng-controller="main_controller" class="texte-user">
 		<!--<div class="contener" ng-controller="bandeau_controller">-->
 		<div class="contener" ng-hide="no_logged_in" ng-show="isLoggedIn()">
 			<div class="bandeau row">
@@ -31,11 +31,12 @@
     			<span class="colonne col-2">
     				<input class="btn btn-primary pointer" type="button" ng-click="loadQuizz()" value="Quizzs">
     			</span>
-    			<span class="colonne col-3" id="bandeau-message">
-					<img class="image_bandeau" src={{user.avatar}}>
+    			<span class="colonne col-2" id="bandeau-message">
+					<!-- <img class="image_bandeau" src={{user.avatar}}> -->
     			</span>
-    			<span class="colonne col-2" id="bandeau-nom">
-    				<a class="pointer" ng-click="loadUser()" id="user-show"> {{ user.username }} </a>
+    			<span class="colonne col-3" id="bandeau-nom" ng-click="loadUser()">
+    				<img class="pointer image_bandeau" src={{user.avatar}}>
+    				<a class="pointer" id="user-show"> {{ user.username }} </a>
     			</span>
     			<span class="colonne col-2 ">
     				<form ng-submit="logOut()">
@@ -68,7 +69,9 @@
 		  			</div>
 	  			</div>
 				<div>
-					Meilleurs Scores :
+					<div class="h3">
+						Meilleurs Scores :
+					</div>
 					<div class="row list head">
 						<span class="texte-user titre colonne col-5">
 							Date
@@ -96,14 +99,17 @@
 						</div>
 					</div>
 				</div>
-				<div>
+				<div class="h4">
 					Score total : {{sumScore}}
 				</div>
 	  			<!-- Test controleur requetes -->
 	  			<!-- <div ng-click="getBest()">Les meilleurs scores</div> -->
 	  			<!-- <div ng-click="getsumScore()">Le score total</div> -->
 	  			<div class="form-modif" ng-show="showModif">
-		  			<form class= "form-modif-user" name="modif-user-form" ng-submit="modifUser()">
+		  			<form class="form-modif-user error-no-anim" name="modif-user-form" ng-submit="modifUser()">
+		  				<div class="h3">
+		  					Modifier mes informations
+		  				</div>
 				  		<div class="form-row">
 				    		<div class="col">
 								<input class="form-control" id='identifiant' type="texte" placeholder="identifiant" name="identifiant" ng-model="identifiant" value="{{user.username}}">
@@ -134,34 +140,36 @@
   		<div ng-show="showQuizz">
 	  		<div class="bandeau quizz" ng-controller="quizz_controller">
 	  			<div ng-show="searchQuizz">
-					<div class="quizz-search">
-			  			<input class="btn btn-primary pointer" type="button" ng-click="getQuizzes()" value="Faire un quizz">
-						<!--{{ quizzs }}-->
-					</div>
-					<div class="defis-search">
-			  			<input class="btn btn-primary pointer position" type="button" ng-click="getDefis()" value="Voir mes défis">
-						<!--{{ quizzs }}-->
+	  				<div class="row quizz-select">
+						<div class="col-6 colonne quizz-search">
+				  			<input class="btn btn-primary pointer" type="button" ng-click="getQuizzes()" value="Faire un quizz">
+							<!--{{ quizzs }}-->
+						</div>
+						<div class="col-6 colonne defis-search">
+				  			<input class="btn btn-primary pointer" type="button" ng-click="getDefis()" value="Voir mes défis">
+							<!--{{ quizzs }}-->
+						</div>
 					</div>
 					<div class="texte-quizz titre row list head" ng-show="showDefis">
-						<span class="colonne col-3 defi-name">
+						<span class="colonne col-6 defi-name">
 							Nom
 						</span>
-						<span class="colonne col-3 defi-score">
+						<span class="colonne col-6 defi-score">
 							Score
 						</span>
 					</div>
 					<div ng-show="showDefis">
-						<div class="defis-tableau">
+						<div class="defis-tableau quizz-tableau">
 							<div class="defis-list" ng-repeat="defi in defis">
-								<div class="defi-info row" ng-click="playQuizz(defi, 'facile')">
+								<div class="defi-info row pointer" ng-click="playQuizz(defi, 'facile')">
 									<!--
 										Infos de l'utilisateur défiant:
 											nom, prenom, score, bouton accapter le défi
 									-->
-									<span class="colonne col-3 defi-name">
+									<span class="colonne col-6 defi-name">
 										{{ defi.nom_user_defiant }}
 									</span>
-									<span class="colonne col-3 defi-score">
+									<span class="colonne col-6 defi-score">
 										{{ defi.score_user_defiant }}
 									</span>
 								</div>
@@ -169,25 +177,32 @@
 						</div>
 					</div>
 					<div ng-show="quizzs">
-						<div class="select-difficilte selection">
-		  					<span class="difficulte ">
-		  						<input class="btn btn-primary" type="button" ng-click="setDifficulte('facile')" value="Facile">
-								<!--Facile-->
-		  					</span>
-		  					<span class="difficulte ">
-								<input class="btn btn-primary" type="button" ng-click="setDifficulte('normal')" value="Normale">
-		  						<!--Normal-->
-		  					</span>
-		  					<span class="difficulte ">
-								<input class="btn btn-primary" type="button" ng-click="setDifficulte('difficile')" value="Difficile">
-		  						<!--Difficile-->
-		  					</span>
-		  				</div>
-						<div class="nb-question-select">
-							<label>
-								Nombre de questions:
-							</label>
-							<input type="number" name="nbQuestion" min="1" max="30" ng-model="nbQuestion">
+						<div class="quizz-options row">
+							<div class="quizz-tableau col-11 row">
+								<div class="h4 col-12">
+									Options
+								</div>
+								<div class="col-6 colonne select-difficilte selection">
+				  					<span class="difficulte ">
+				  						<input class="btn btn-primary" type="button" ng-click="setDifficulte('facile')" value="Facile">
+										<!--Facile-->
+				  					</span>
+				  					<span class="difficulte ">
+										<input class="btn btn-primary" type="button" ng-click="setDifficulte('normal')" value="Normale">
+				  						<!--Normal-->
+				  					</span>
+				  					<span class="difficulte ">
+										<input class="btn btn-primary" type="button" ng-click="setDifficulte('difficile')" value="Difficile">
+				  						<!--Difficile-->
+				  					</span>
+				  				</div>
+								<div class="col-6 colonne nb-question-select">
+									<label>
+										Nombre de questions:
+									</label>
+									<input type="number" name="nbQuestion" min="1" max="30" ng-model="nbQuestion">
+			  					</div>
+		  					</div>
 	  					</div>
 						<div class="texte-quizz titre row list head" ng-show="quizzs">
 							<span class="colonne col-6 quizz-name">
@@ -231,31 +246,36 @@
 						{{ quizz['thème'] }}
 					</div>
 					<div class="quizz-question">
-						<div class="texte-question colonne col-12 row question">
+						<div class="texte-question colonne col-12 row question h4">
 							{{ question['question'] }}
 						</div>
-						<div class="propositions"  ng-repeat="proposition in questionAffiche">
-							<span class="texte-question pointer colonne col-12 row proposition-elem" ng-click="reponse(proposition)">
-								{{ proposition }}
-							</span>
+						<div class="row">
+							<div class="propositions col-2 pointer colonne quizz-tableau"  ng-repeat="proposition in questionAffiche" ng-click="reponse(proposition)">
+								<span class="texte-question pointer colonne proposition-elem" >
+									{{ proposition }}
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<div ng-show="showEnd">
-					<div class="resultat">
-						<span>
-							score :
-						</span>
-						<span>
-							{{ score }}
-						</span>
+					<div class="resultat h3">
+						<div class="error-no-anim">
+							score : {{ score }}
+						</div>
 					</div>
-					<div ng-click="reset()">
-						Rejouer
-					</div>
-					<div ng-show="showDefier" ng-click="recupUserDefier()">
-						Défier un joueur
+					<div class="row">
+						<div class="propositions pointer ng-scope col-6 colonne" ng-click="reset()">
+							<div class="quizz-tableau">
+								Rejouer
+							</div>
+						</div>
+						<div class="col-6 colonne" ng-show="showDefier" ng-click="recupUserDefier()">
+							<div class="quizz-tableau propositions pointer ng-scope ">
+								Défier un joueur
+							</div>
+						</div>
 					</div>
 					<div class="allUsers" ng-show="showUserDefier">
 						<div class="row">
@@ -263,13 +283,16 @@
 							  	
 							</div>
 						</div>
-						<div class="row pointer" ng-repeat="user in usersDefier" ng-click="defier(user.id)">
-							<span class="user-logo">
-		 						<img class="image_avatar" src={{user.avatar}}>
-		 					</span>
-		 					<span class="user-identifiant">
-		 						{{user.identifiant}}
-		 					</span>
+						<div class="quizz-tableau row">
+							<div class="col-3 colonne pointer" ng-repeat="user in usersDefier" ng-click="defier(user.id)">
+								<div class="user-logo">
+			 						<img class="image_avatar" src={{user.avatar}}>
+			 						{{user.identifiant}}
+			 					</div>
+			 					<!-- <span class="user-identifiant">
+			 						{{user.identifiant}}
+			 					</span> -->
+							</div>
 						</div>
 					</div>
 				</div>
@@ -289,39 +312,46 @@
 		 <div ng-show="showAcceuil">
 		 		<div class="bandeau quizz" ng-controller="accueil_controller">
 		 			<div class="Top10Best">
-		 				<div class="Top-10-best-title">
-		 					Les 10 meuilleurs scores
+		 				<div class="quizz-tableau">
+			 				<div class="h3 Top-10-best-title">
+			 					Les 10 meuilleurs scores
+			 				</div>
 		 				</div>
-		 				<div class="Top-10-label">
+		 				<!-- <div class="Top-10-label">
 		 					<span class="user-logo">
-		 						Avatar
+		 						Utilisateur
 		 					</span>
 		 					<span class="user-identifiant">
 		 						identifiant
 		 					</span>
 		 					<span class="user_score">
-		 						Meilleur score
+		 						Score
 		 					</span>
-		 				</div>
-		 				<div class="listUser" ng-repeat="user in tot10Best" ng-click="loadOtherUser(user.id_users)">
-		 					<span class="user-logo">
-		 						<img class="image_avatar pointer" src={{user.avatar}}>
-		 					</span>
-		 					<span class="user-identifiant">
-		 						{{user.identifiant}}
-		 					</span>
-		 					<span class="user_score">
-		 						{{user.score}}
-		 					</span>
-		 				</div>
+		 				</div> -->
+		 				<div class="quizz-tableau">
+			 				<div class="listUser" ng-repeat="user in tot10Best" ng-click="loadOtherUser(user.id_users)">
+			 					<span class="pointer user-logo">
+			 						<img class="image_avatar pointer" src={{user.avatar}}>
+			 						{{user.identifiant}}
+			 					</span>
+			 					<!-- <span class="user-identifiant">
+			 						{{user.identifiant}}
+			 					</span> -->
+			 					<span class="user_score error-no-anim">
+			 						{{user.score}}
+			 					</span>
+			 				</div>
+			 			</div>
 		 			</div>
 		 			<div class="Top-10-sum">
-		 				<div class="Top-10-best-title">
-		 					Les 10 meuilleurs scores cumulés
+		 				<div class="quizz-tableau">
+			 				<div class="h3 Top-10-best-title">
+			 					Les 10 meuilleurs scores cumulés
+			 				</div>
 		 				</div>
-		 				<div class="Top-10-label">
+		 				<!-- <div class="Top-10-label">
 		 					<span class="user-logo">
-		 						Avatar
+		 						Utilisateur
 		 					</span>
 		 					<span class="user-identifiant">
 		 						identifiant
@@ -329,18 +359,21 @@
 		 					<span class="user_score">
 		 						somme_score
 		 					</span>
-		 				</div>
-		 				<div class="listUser" ng-repeat="user in tot10Sum" ng-click="loadOtherUser(user.id_users)">
-		 					<span class="user-logo">
-		 						<img class="image_avatar pointer" src={{user.avatar}}>
-		 					</span>
-		 					<span class="user-identifiant">
-		 						{{user.identifiant}}
-		 					</span>
-		 					<span class="user_score">
-		 						{{user.somme_score}}
-		 					</span>
-		 				</div>
+		 				</div> -->
+		 				<div class="quizz-tableau">
+			 				<div class="listUser" ng-repeat="user in tot10Sum" ng-click="loadOtherUser(user.id_users)">
+			 					<span class="user-logo">
+			 						<img class="image_avatar pointer" src={{user.avatar}}>
+			 						{{user.identifiant}}
+			 					</span>
+			 					<!-- <span class="user-identifiant">
+			 						{{user.identifiant}}
+			 					</span> -->
+			 					<span class="user_score error-no-anim">
+			 						{{user.somme_score}}
+			 					</span>
+			 				</div>
+			 			</div>
 		 			</div>
 		 		</div>
 		 </div>

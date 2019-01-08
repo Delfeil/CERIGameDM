@@ -362,8 +362,8 @@ function quizz_controller($scope, session, accessDataService, $rootScope) {
 			$scope.showDefier = false;
 			$scope.showUserDefier = false;
 			$scope.showEnd = true;
-			console.log("$scope.selectedQuizz: ", $scope.selectedQuizz, "défi?: ", $scope.selectedQuizz.userDefiant, "type: ", typeof $scope.selectedQuizz.userDefiant)
-			if(typeof $scope.selectedQuizz.userDefiant === "undefined") {
+			console.log("$scope.selectedQuizz: ", $scope.selectedQuizz, "défi?: ", $scope.selectedQuizz.id_user_defiant, "type: ", typeof $scope.selectedQuizz.id_user_defiant)
+			if(typeof $scope.selectedQuizz.id_user_defiant === "undefined") {
 				$scope.showDefier = true;
 			}
 			$scope.endQuizz();
