@@ -1,4 +1,8 @@
 
+/**---Controleur du bandeau
+* Reçoie un événement avec un message à afficer et si c'est une erreur ou non,
+* Affiche ce message et change la classe du bandeau en fonction de la nature du message (erreur ou non)
+*/
 function bandeau_controller($scope, session) {
 	$scope.messageTab = [];
 	$scope.message = {
@@ -8,6 +12,9 @@ function bandeau_controller($scope, session) {
 	$scope.running = false;
 	$scope.secondMessage = false;
 
+	/**
+	*	Réinitialisation du bandeau
+	*/
 	$scope.reset = function(callback) {
 		$scope.message.msg = "";
 		$scope.message.class = "hide";
@@ -17,10 +24,12 @@ function bandeau_controller($scope, session) {
 		$scope.$apply();
 	}
 
+	/**
+	*	Affichage d'un message
+	*/
 	$scope.showMessage = function() {
 		$scope.running = true;
 		var message = $scope.messageTab.shift();
-		// console.log("message: ", message);
 		if(message.type == "error") {
 			$scope.message.class = "error";
 		} else if(message.type == "message") {
@@ -50,6 +59,9 @@ function bandeau_controller($scope, session) {
 		}, 6500);
 	}
 
+	/**
+	*	Evenement de réception d'un message
+	*/
 	$scope.$on('getMessage', function(event, data) {
 		console.log("Bandeau message reçu, ", event, data, "message ", data.msg, "type: ", data.type, "messageTab: ", $scope.messageTab, $scope.messageTab.length, "comp ", $scope.messageTab.length > 0);
 		if($scope.messageTab.length > 0) {
@@ -68,21 +80,22 @@ function bandeau_controller($scope, session) {
 				$scope.showMessage();
 			}
 		}
-		// $scope.messageTab.forEach(function(message) {
-		// });
 	});
 }
 
 //------------Controleur page d'acceuil
+//	Récupération des données relatives aux dfférents TOP10
 function accueil_controller($scope, accessDataService) {
 	$scope.tot10Best = null;
 	$scope.top10Sum = null;
 
+	// Initialisation de l'acceuil
 	$scope.reloadAcceuil = function() {
 		$scope.getTop10Sum();
 		$scope.getTop10Best();
 	}
 
+	// Récupération du top 10 avec les joueurs aillant réaliser un des meilleurs score
 	$scope.getTop10Best = function() {
 		accessDataService.getInfo('/top10_best', function(data) {
 			console.log("result: getBest", data)
@@ -90,6 +103,7 @@ function accueil_controller($scope, accessDataService) {
 		});
 	}
 
+	// Récupération du top 10 avec les joueurs aillant le score cumulé le plus élevé
 	$scope.getTop10Sum = function() {
 		accessDataService.getInfo('/top10_tot', function(data) {
 			console.log("result: getBest", data)
@@ -97,6 +111,7 @@ function accueil_controller($scope, accessDataService) {
 		});
 	}
 
+	// Récupération de l'événement transmis par le main controleur demandant d'afficher l'acceuil
 	$scope.$on('showAcceuil', function() {
 		console.log("click event : acceuil");
 		$scope.reloadAcceuil();
@@ -104,7 +119,7 @@ function accueil_controller($scope, accessDataService) {
 	$scope.reloadAcceuil();
 }
 
-//-----------Controleu quizz
+//-----------Controleur quizz
 function quizz_controller($scope, session, accessDataService, $rootScope) {
 	$scope.quizzs = null;
 	$scope.themes = [];
@@ -492,7 +507,8 @@ function quizz_controller($scope, session, accessDataService, $rootScope) {
 	});
 }
 
-//---------Controlleur view users
+//---------Controleur view users
+// Affichage des informations sur un utilisateur (si c'est l'utilisateur de la session, un formulaire de mosification des données est affiché)
 function user_controller($scope, session, accessDataService, $rootScope) {
 	$scope.user = null;
 	$scope.bestScores = null;
@@ -507,6 +523,7 @@ function user_controller($scope, session, accessDataService, $rootScope) {
 
 	$scope.showModif = true;
 
+	// récupération du score total cumulé d'un utilisateur
 	$scope.getsumScore = function() {
 		if (typeof $scope.user !== "undefined" && $scope.user !== null)
 		{
@@ -517,6 +534,7 @@ function user_controller($scope, session, accessDataService, $rootScope) {
 		}
 	}
 
+	//	Récupération des 3 meilleurs scores de l'utilisateur
 	$scope.getBest = function() {
 		if (typeof $scope.user !== "undefined" && $scope.user !== null)
 		{
@@ -557,7 +575,8 @@ function user_controller($scope, session, accessDataService, $rootScope) {
 	});
 
 
-
+	// Modification des informations de l'utilisateur, en fonction des éléments remplis et changés par rapport au informations actuelle
+	// Cronstruction de l'url avec certais paramèters qui vont devoir être modifiés pour l'utilisateur connecté
 	$scope.modifUser = function() {
 		var CurUser = session.getUser();
 		if($scope.user._id != CurUser._id) {
@@ -638,6 +657,9 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 	$scope.showUser = false;
 	$scope.showAcceuil = false;
 
+	/******
+	**	Gestion des actions de l'utilisateur conduisat à des vues gérées par d'autres controleurs
+	******/
 	$scope.loadUser= function(){
 		$scope.showUser = !$scope.showUser;
 		$scope.showQuizz = false;
@@ -676,11 +698,8 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 		$rootScope.$broadcast('showAcceuil');
 	}
 
+	// Communication avec le controleur du bandeau pour lui envoyer un message à afficher
 	$scope.afficheMessage = function(message) {
-		// $('#bandeau-message').removeClass("bandeau-notif").removeClass("error");
-		// $scope.classBandeau = "bandeau-notif";
-
-		// $scope.textBandeau = message;
 		$rootScope.$broadcast('getMessage', {
 			type: "message",
 			msg: message
@@ -691,6 +710,7 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 		$scope.nom = nom;
 	}
 
+	// Communication avec le controleur du bandeau pour lui envoyer une erreur à afficher
 	$scope.afficheMessageError = function(message) {
 		// $('#bandeau-message').removeClass("bandeau-notif").removeClass("error");
 		// $scope.classBandeau = "error";
@@ -723,6 +743,7 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 	};
 
 	$scope.logOut = function() {
+		// Déconnexion de l'utilisateur
 		console.log('logOut')
 		$scope.showAcceuil = false;
 		$scope.user = null;
@@ -778,6 +799,7 @@ function main_controller($scope, auth, session, accessDataService, $rootScope, s
 			$scope.afficheMessage(data.message);
 		}
 	});
+	
 	/**
 	*	Gestion des évenements reçus par Le controleur
 	*/

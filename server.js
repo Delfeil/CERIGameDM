@@ -45,10 +45,10 @@ var pool = new pgClient.Pool({
 app.use(bodyParser.json());
 
 
-/******** Configuration du serveur NodeJS - Port : 3xxx
+/******** Configuration du serveur NodeJS - Port : 3101
 *
 ********/
-var server=app.listen(3101, function() {
+var server=app.listen(3140, function() {
 	console.log('listening on 3101');
 });
 
@@ -73,8 +73,12 @@ app.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname + '/CERIGame/index.html'));
 });
 
+
+/******** 
+*	Connexion, appelé après la saisie du formulaire de connexion
+********/
 app.get('/login', function(req, res) {
-	//console.log('Login: ', req.query.login, " mdp: ", req.query.mdp);
+	
 	var sql= "select * from fredouil.users where identifiant='" + req.query.login + "';";
 	pool.connect(function(err, client, done) {
 		if(err) {console.log('Error connecting to pg server' + err.stack);}
@@ -83,7 +87,6 @@ app.get('/login', function(req, res) {
 		};
 		client.query(sql, function(err, result){
 			var responseData = {};
-			//console.log("result: ", result, "mdp: ", sha1(req.query.mdp))
 			if(err) {
 				console.log('Erreur d’exécution de la requete' + err.stack);
 			} else if ((result.rows[0] != null) && (result.rows[0].motpasse == sha1(req.query.mdp))) {
@@ -116,11 +119,6 @@ app.get('/login', function(req, res) {
 						responseData.last_connect = req.session.user.last_connect;
 					}
 				}
-				// req.session.isConnected = true;
-				// req.session.username = req.query.login;
-				// req.session.name = result.rows[0].nom;
-				// req.session.firstName = result.rows[0].prenom;
-				// req.session.id = result.rows[0].id;
 
 				responseData.name=result.rows[0].nom;
 				responseData.id=result.rows[0].id;
@@ -128,11 +126,11 @@ app.get('/login', function(req, res) {
 				responseData.firstName = result.rows[0].prenom;
 				responseData.statusMsg='Connexion réussie : bonjour ' + result.rows[0].prenom;
 				responseData.avatar= result.rows[0].avatar;
+					//On informe les utilisateurs qu'un utilisateur viens de se connecter
 				io.emit('notification_connexion', req.query.login +  " vient de se connecter.");
 			} else {
 				console.log('Connexion échouée : informations de connexion incorrecte');
 				responseData.statusMsg='Connexion échouée : informations de connexion incorrecte';
-				//io.emit('notification_erreur', 'Erreur de Connexion');
 			}
 			res.send(responseData);
 		});
@@ -140,6 +138,9 @@ app.get('/login', function(req, res) {
 	});
 });
 
+/******** 
+*	Gestion de la déconnexion de l'utilisateur actuellement connecté
+********/
 app.get('/logout', function(req, res) {
 	console.log("déconnexion: last_connect: " + req.query.last_connect);
 	if(typeof req.session.user !== "undefined") {
@@ -147,25 +148,18 @@ app.get('/logout', function(req, res) {
 	} else {
 		console.log("utilisateur non présent dans la base de donnée MongoDB...");
 	}
-	//req.session.destroy();
 	res.send();
 });
 
-app.get('/resetMongo', function(req, res) {
-	req.session.destroy();
-	res.send();
-});
+// Fonction de debug pour reset la base de donnée MongoDB
+// app.get('/resetMongo', function(req, res) {
+// 	req.session.destroy();
+// 	res.send();
+// });
 
-app.get('/quizz', function(req, res) {
-	if(typeof req.session.isConnected === "undefined") {
-		res.send({
-			message: "Accès non autorisé"
-		});
-	} else {
-		res.sendFile(path.join(__dirname + '/CERIGame/app/views/quizz.html'));
-	}
-});
-
+/******** 
+*	Récupération des différents quizz, dans MongoDB
+********/
 app.get('/quizzList', function(req, res) {
 	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
 		if(err) {
@@ -185,6 +179,10 @@ app.get('/quizzList', function(req, res) {
 	});
 });
 
+
+/******** 
+*	Récupération des différents défis lancé à un utilisateur (passé en argument)
+********/
 app.get('/getDefis', function(req, res) {
 	// gérer la récup de + d'infos depuis le serveur nodeJs
 	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
@@ -253,6 +251,9 @@ app.get('/getDefis', function(req, res) {
 	});
 });
 
+/******** 
+*	Récupération des intitulés des thèmes des quizzs (pas utilisé)
+********/
 app.get('/quizzTheme', function(req, res) {
 	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
 		if(err) {
@@ -277,6 +278,9 @@ app.get('/quizzTheme', function(req, res) {
 	});
 });
 
+/******** 
+*	Récupération de tous les utilisateurs de la base de donnée postgre sql
+********/
 app.get('/getAllUsers', function(req, res) {
 	var sql="select * from fredouil.users where id!="+req.session.user.id+";";
 	pool.connect(function(err, client, done) {
@@ -300,6 +304,11 @@ app.get('/getAllUsers', function(req, res) {
 	});
 });
 
+/******** 
+*	URL de type post
+*	Poposition de quizz à un autre joueur:
+*	arguments: le quizz relatif au défi, le score du joueur qui propose le défi et l'id du joueur défié
+********/
 app.post('/defier', function(req, res) {
 	console.log("Ajout défi: ", req.session.userId, " <- ", req.body);
 	if(typeof req.session.user !== 'undefined') {
@@ -347,6 +356,9 @@ app.post('/defier', function(req, res) {
 	}
 });
 
+/******** 
+*	Récupération de l'historique des scores au quizz d'un joueur (id de cuil-ci passée en argument)
+********/
 app.get('/historique', function(req, res) {
 	if(typeof req.session.user !== 'undefined') {
 		var sql= "select * from fredouil.historique where id_users='" + req.session.user.id + "'  order by date DESC;";
@@ -358,7 +370,6 @@ app.get('/historique', function(req, res) {
 			}
 			client.query(sql, function(err, result){
 				var responseData = {};
-				//console.log("result: ", result, "mdp: ", sha1(req.query.mdp))
 				if(err) {
 					console.log('Erreur d’exécution de la requete' + err.stack);
 				} else if (result.rows[0] != null) {
@@ -376,10 +387,12 @@ app.get('/historique', function(req, res) {
 	}
 });
 
+/******** 
+*	Sauvegarde le score qu'un utilisateur a eu après avoir joué à un quizz
+********/
 app.get('/saveScore', function(req, res) {
 	console.log("save score")
 	var score = req.query.score;
-	// var idQuizz = req.query.idQuizz;
 	var nbBonneReponse = req.query.nbReponse;
 	var tempS = req.query.tempS;
 	var sql= "insert into fredouil.historique ( id_users, date, nbreponse, temps, score) values ('" + req.session.user.id + "', LOCALTIMESTAMP, '" + nbBonneReponse + "', '" + tempS + "', '" + score + "');";
@@ -405,7 +418,7 @@ app.get('/saveScore', function(req, res) {
 });
 
 app.get('/top10_best', function(req, res) {
-	//Page donnant les meilleurs scores
+	//Page donnant les 10 meilleurs scores, entre tous les utilisateurs référencés dans la base de donnée
 
 	var sql= "select DISTINCT(id_users), score, date, temps, nbreponse, identifiant, nom, prenom, avatar from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id order by score DESC FETCH FIRST 10  ROWS ONLY;";
 	pool.connect(function(err, client, done) {
@@ -430,7 +443,7 @@ app.get('/top10_best', function(req, res) {
 });
 
 app.get('/top10_tot', function(req, res) {
-	//Page donnant les meilleurs scores cumulés
+	//Page donnant les 10 meilleurs scores cumulés, entre tous les utilisateurs référencés dans la base de donnée
 
 	// var sql= "select SUM(score) as somme_score, id_users from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id group by id_users order by somme_score DESC FETCH FIRST 10 ROWS ONLY;";
 	var sql= "select SUM(score) as somme_score, id_users, identifiant, avatar from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id group by id_users, identifiant, avatar order by somme_score DESC FETCH FIRST 10 ROWS ONLY;";
@@ -455,6 +468,9 @@ app.get('/top10_tot', function(req, res) {
 	});
 });
 
+/******** 
+*	Retourne les informations concernant un utilisateur en particulié (id de l'utilisateur passé en argument)
+********/
 app.get('/getOtherUser', function(req, res) {
 	var sql = "select * from fredouil.users where id= " + req.query.userId + ";";
 	console.log("Requete: ----------> " + sql)
@@ -486,6 +502,9 @@ app.get('/getOtherUser', function(req, res) {
 	});
 });
 
+/******** 
+*	Retourne le score cummulé d'un utilisateur (id pasé en argument)
+********/
 app.get('/sumScore', function(req, res) {
 	var idUser = req.query.idUser;
 	if(typeof idUser == "undefined") {
@@ -516,6 +535,9 @@ app.get('/sumScore', function(req, res) {
 	});
 });
 
+/******** 
+*	Retourne les 3 meilleurs score d'un utilisateur (id pasé en argument)
+********/
 app.get('/bestScore', function(req, res) {
 	var idUser = req.query.idUser;
 	if(typeof idUser == "undefined") {
@@ -524,7 +546,6 @@ app.get('/bestScore', function(req, res) {
 		});
 		return;
 	}
-	console.log("erreur: ", typeof idUser)
 	// var sql= "select * from fredouil.historique where id_users =" + idUser + " order by score DESC FETCH FIRST 3 ROWS ONLY;";
 	var sql = "select * from fredouil.historique left join fredouil.users on fredouil.historique.id_users = fredouil.users.id where id_users = " + idUser + " order by score DESC FETCH FIRST 3 ROWS ONLY;"
 	pool.connect(function(err, client, done) {
@@ -548,6 +569,11 @@ app.get('/bestScore', function(req, res) {
 	});
 });
 
+/******** 
+*	Modifie des informations d'un utilisateur
+*	Arguments: id de l'utilisateur (aubligatoire)
+*	Celon l'argument passé, différentes informations vont être modifiées (avatar et/ou nom at/ou et/ou prénom et/ou pseudo(identifiant != id))
+********/
 app.get('/updateUser', function(req, res) {
 	var sql = "UPDATE fredouil.users SET ";
 	var precedent = false;
@@ -643,20 +669,3 @@ app.get('/updateUser', function(req, res) {
 		client.release();
 	});
 });
-
-/*//Loadig js files...
-app.get('/app/controllers/controller.js', function(req, res) {
-	res.sendFile(path.join(__dirname + '/CERIGame/app/controllers/controller.js'));
-});
-
-app.get('/app/app.js', function(req, res) {
-	res.sendFile(path.join(__dirname + '/CERIGame/app/app.js'));
-});
-
-app.get('/app/services/services.js', function(req, res) {
-	res.sendFile(path.join(__dirname + '/CERIGame/app/services/services.js'))
-});
-
-app.get('/css/main.css', function(req, res) {
-	res.sendFile(path.join(__dirname + '/CERIGame/css/main.css'))
-});*/
