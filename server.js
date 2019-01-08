@@ -48,7 +48,7 @@ app.use(bodyParser.json());
 /******** Configuration du serveur NodeJS - Port : 3101
 *
 ********/
-var server=app.listen(3140, function() {
+var server=app.listen(3101, function() {
 	console.log('listening on 3101');
 });
 
