@@ -48,7 +48,7 @@ app.use(bodyParser.json());
 /******** Configuration du serveur NodeJS - Port : 3101
 *
 ********/
-var server=app.listen(3101, function() {
+var server=app.listen(3140, function() {
 	console.log('listening on 3101');
 });
 
@@ -246,6 +246,41 @@ app.get('/getDefis', function(req, res) {
 					mongoClient.close();
 					res.send(responseData);
 				}
+			});
+		}
+	});
+});
+
+/******** 
+*	Suppresion d'un défi
+********/
+app.get('/removeDefi', function(req, res) {
+	var id_defi = req.query.idDefi;
+	var userId = req.query.userId;
+	var mongoReq = {
+			_id: new mongodb.ObjectID('' + id_defi)
+	};
+	MongoClient.connect(dsnMongoDB, {useNewUrlParser: true}, function(err, mongoClient) {
+		if(err) {
+			return console.log("erreur connexion base de données");
+		}
+		if(mongoClient) {
+			mongoClient.db().collection('defi').deleteOne(mongoReq, function(err, resMongo) {
+				if(err) {
+					res.send({message: "erreur ", error: true});
+					return;
+				}
+				console.log("Défi ajouté ", resMongo);
+				// var notif = {
+				// 	message: req.session.user.username + " a refusé l'un de vos défis défi",
+				// 	id_user_defie: userToDefie
+				// }
+				// io.emit('reception_defi', notif);
+				mongoClient.close();
+				res.send({
+					message: "Défi retiré",
+					error: false
+				});
 			});
 		}
 	});

@@ -102,7 +102,7 @@ function sessionService($log, $window, accessDataService) {
 
 // Service webSocket
 function treatSocket($rootScope) {
-	var socket = io.connect('http://pedago02a.univ-avignon.fr:3101/');
+	var socket = io.connect('http://pedago02a.univ-avignon.fr:3140/');
 	return {
 		on: function(eventName, callback){
 			socket.on(eventName, callback);

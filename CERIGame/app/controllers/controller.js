@@ -30,15 +30,19 @@ function bandeau_controller($scope, session) {
 	$scope.showMessage = function() {
 		$scope.running = true;
 		var message = $scope.messageTab.shift();
+		console.log("info message: ", message, "scopemessage: ", $scope.message)
 		if(message.type == "error") {
 			$scope.message.class = "error";
 		} else if(message.type == "message") {
 			$scope.message.class = "bandeau-notif";
 		}
 		$scope.message.msg = message.msg;
-		if($scope.secondMessage) {
-			$scope.$apply();
-		}
+		console.log("info message2: ", message, "scopemessage: ", $scope.message)
+		setTimeout(function() {
+			$scope.$apply();	//Permet de forcer l'affichage des modifs relatives à un message
+		}, 2000);
+		// if($scope.secondMessage) {
+		// }
 
 		console.log("Message affiché: ", $scope.message.msg, $scope.message.class)
 		setTimeout(function() {
@@ -48,12 +52,13 @@ function bandeau_controller($scope, session) {
 					$scope.$apply(function() {
 						$scope.showMessage();
 					});
-				}, 2000)
+				}, 3000)
 			} else {
 				$scope.secondMessage = false;
 				$scope.running = false;
 				$scope.message.msg = "";
 				$scope.message.class = "hide";
+				console.log("ici")
 				$scope.$apply();
 			}
 		}, 6500);
@@ -72,6 +77,7 @@ function bandeau_controller($scope, session) {
 				}
 			}
 			if(!$scope.running) {
+				$scope.messageTab.push(data);
 				$scope.showMessage();
 			}
 		} else {
@@ -416,6 +422,19 @@ function quizz_controller($scope, session, accessDataService, $rootScope) {
 		console.log("user to defie: ", id, "curQuizz: ", $scope.selectedQuizz);
 		var curUser = session.getUser();
 		accessDataService.postInfo('/defier?userId='+id + "&score=" + $scope.score, $scope.selectedQuizz, function(data) {
+			if(data.error === false) {
+				$rootScope.$broadcast('getMessage', {
+					type: "message",
+					msg: data.message
+				});
+				$scope.reset();
+			}
+		});
+	}
+
+	$scope.deleteDefis = function(id, userId) {
+		console.log("deleteDefis: ", id);
+		accessDataService.getInfo('/removeDefi?idDefi='+id + "&userId=" + userId, function(data) {
 			if(data.error === false) {
 				$rootScope.$broadcast('getMessage', {
 					type: "message",
