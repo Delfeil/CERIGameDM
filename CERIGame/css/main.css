@@ -250,3 +250,7 @@ body {
 .quizz-select {
     margin-bottom: 5px;
 }
+
+.pad{
+    margin-bottom: -5px;
+}
