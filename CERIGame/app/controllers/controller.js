@@ -434,13 +434,19 @@ function quizz_controller($scope, session, accessDataService, $rootScope) {
 
 	$scope.deleteDefis = function(id, userId) {
 		console.log("deleteDefis: ", id);
-		accessDataService.getInfo('/removeDefi?idDefi='+id + "&userId=" + userId, function(data) {
+		var url = '/removeDefi?idDefi='+id;
+		if(typeof userId != "undefined") {
+			url+= "&userId=" + userId;
+		}
+		accessDataService.getInfo(url, function(data) {
 			if(data.error === false) {
-				$rootScope.$broadcast('getMessage', {
-					type: "message",
-					msg: data.message
-				});
-				$scope.reset();
+				if(typeof userId === "undefined") {
+					$rootScope.$broadcast('getMessage', {
+						type: "message",
+						msg: data.message
+					});
+				}
+				// $scope.reset();
 			}
 		});
 	}
@@ -451,6 +457,15 @@ function quizz_controller($scope, session, accessDataService, $rootScope) {
 		var endTime = Date.now();
 		$scope.tempS = Math.floor((endTime - $scope.debut)/1000);
 		$scope.score = Math.round(($scope.nbBonneReponse*1398.2)/$scope.tempS);
+		console.log("là: ", $scope.selectedQuizz)
+		if(typeof $scope.selectedQuizz.score_user_defiant !== "undefined" && $scope.selectedQuizz.score_user_defiant < $scope.score) {
+			console.log("ici")
+			$rootScope.$broadcast('getMessage', {
+				type: "message",
+				msg: "Défi réussi"
+			});
+			$scope.deleteDefis($scope.selectedQuizz._id, $scope.selectedQuizz.id_user_defiant);
+		}
 		accessDataService.getInfo("/saveScore?score=" + $scope.score + "&nbReponse=" + $scope.nbBonneReponse + "&tempS=" + $scope.tempS, function(data) {
 			console.log("result: ", data)
 		});

@@ -7,6 +7,7 @@ const sha1 = require('sha1');	//Crytage des mdp
 const session = require('express-session');	//Gestion des sessions
 const MongoDBStore = require('connect-mongodb-session')(session);	//MongoDB for session
 const MongoClient = require('mongodb').MongoClient; //MongoDB for other
+const mongodb = require('mongodb');
 const path = require('path');
 const bodyParser = require('body-parser');
 
@@ -48,7 +49,7 @@ app.use(bodyParser.json());
 /******** Configuration du serveur NodeJS - Port : 3101
 *
 ********/
-var server=app.listen(3140, function() {
+var server=app.listen(3101, function() {
 	console.log('listening on 3101');
 });
 
@@ -271,11 +272,13 @@ app.get('/removeDefi', function(req, res) {
 					return;
 				}
 				console.log("Défi ajouté ", resMongo);
-				// var notif = {
-				// 	message: req.session.user.username + " a refusé l'un de vos défis défi",
-				// 	id_user_defie: userToDefie
-				// }
-				// io.emit('reception_defi', notif);
+				if(typeof req.query.userId !== "undefined") {
+					var notif = {
+						message: req.session.user.username + " a relevé votre défi",
+						id_user_defie: req.query.userId
+					}
+					io.emit('reception_defi', notif);
+				}
 				mongoClient.close();
 				res.send({
 					message: "Défi retiré",

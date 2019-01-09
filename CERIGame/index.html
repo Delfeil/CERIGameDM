@@ -163,19 +163,19 @@
 					<div ng-show="showDefis">
 						<div class="defis-tableau quizz-tableau">
 							<div class="defis-list" ng-repeat="defi in defis">
-								<div class="defi-info row pointer" ng-click="playQuizz(defi, 'facile')">
+								<div class="defi-info row" >
 									<!--
 										Infos de l'utilisateur défiant:
 											nom, prenom, score, bouton accapter le défi
 									-->
-									<span class="colonne col-5 defi-name">
+									<span class="colonne pointer col-5 defi-name" ng-click="playQuizz(defi, 'facile')">
 										{{ defi.nom_user_defiant }}
 									</span>
-									<span class="colonne col-5 defi-score">
+									<span class="colonne pointer col-5 defi-score" ng-click="playQuizz(defi, 'facile')">
 										{{ defi.score_user_defiant }}
 									</span>
 									<span class="colonne col-2 defi-delete">
-										<input class="btn error-no-anim pad" type="button" ng-click="" value="Refuser le défi">
+										<input class="btn error-no-anim  pointer" type="button" ng-click="deleteDefis(defi._id)" value="Refuser le défi">
 									</span>
 								</div>
 							</div>
