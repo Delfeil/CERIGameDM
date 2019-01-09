@@ -151,11 +151,13 @@
 						</div>
 					</div>
 					<div class="texte-quizz titre row list head" ng-show="showDefis">
-						<span class="colonne col-6 defi-name">
+						<span class="colonne col-5 defi-name">
 							Nom
 						</span>
-						<span class="colonne col-6 defi-score">
+						<span class="colonne col-5 defi-score">
 							Score
+						</span>
+						<span class="colonne col-2 defi-delete">
 						</span>
 					</div>
 					<div ng-show="showDefis">
@@ -166,11 +168,14 @@
 										Infos de l'utilisateur défiant:
 											nom, prenom, score, bouton accapter le défi
 									-->
-									<span class="colonne col-6 defi-name">
+									<span class="colonne col-5 defi-name">
 										{{ defi.nom_user_defiant }}
 									</span>
-									<span class="colonne col-6 defi-score">
+									<span class="colonne col-5 defi-score">
 										{{ defi.score_user_defiant }}
+									</span>
+									<span class="colonne col-2 defi-delete">
+										<input class="btn error-no-anim pad" type="button" ng-click="" value="Refuser le défi">
 									</span>
 								</div>
 							</div>
@@ -182,7 +187,7 @@
 								<div class="h4 col-12">
 									Options
 								</div>
-								<div class="col-6 colonne select-difficilte selection">
+								<div class="col-5 colonne select-difficilte selection">
 				  					<span class="difficulte ">
 				  						<input class="btn btn-primary" type="button" ng-click="setDifficulte('facile')" value="Facile">
 										<!--Facile-->
